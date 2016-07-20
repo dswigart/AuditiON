@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block Instructions %}
+***this is where instructions go***
+{% endblock %}
+
+{% block Content %}
+<form action="{% url 'applicant_confirmation' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        {% if "name" in field.id_for_label %}
+        Hi {{ field.value }}, please confirm or reject our offer:
+            {{ field.as_hidden }}
+        {% elif "confirmation" in field.id_for_label %}
+            {{ field }}
+        {% elif "code" in field.id_for_label %}
+            {{ field.as_hidden }}
+        {% endif %}
+    {% endfor %}
+    
+    <br>
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

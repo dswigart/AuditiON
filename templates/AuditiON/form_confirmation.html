@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block Instructions %}
+{% endblock %}
+
+{% block Content %}
+<form action="{% url 'audition_form_confirmation' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        
+        {{ field.label_tag }}
+        {{ field.value }}<br>
+        {{ field.as_hidden }}
+        {% if field.id_for_label == "id_youtube_link" %}
+            <iframe src="www.youtube.com"></iframe>
+            {% endif %}
+            
+    {% endfor %}
+    <br>
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

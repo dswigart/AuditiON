@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block Instructions %}
+{% endblock %}
+
+{% block Content %}
+<form action="{% url 'applicant_selection' %}" method="post">
+    {{ set.management_form }}
+    {% csrf_token %}
+    {% for form in set %}
+        {% for field in form %}
+            {% if "-id" in field.id_for_label %}
+                {{ field.as_hidden }}
+            {% elif "name" in field.id_for_label %}
+                {{ field.value }}
+                {{ field.as_hidden }}
+            {% elif "status" in field.id_for_label %}
+                {{ field }}
+            {% elif "part" in field.id_for_label %}
+                {{ field.name }}
+                {{ field }}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <br>
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

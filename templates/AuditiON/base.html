@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "AuditiON/style.css" %}" />
+    <title>{% block title %}AuditiON{% endblock %}</title>
+</head>
+
+<body>
+    <div id="HeadPic">
+        
+    </div>
+    
+    <div id="Wrapper">
+        <div id="Content">
+            <img src="{% static "AuditiON/Logo.png" %}">
+                <div id="Instructions">
+                    {% block Instructions %}
+                
+                    {% endblock %}
+                </div>
+                
+            {% block Content %}
+            
+            
+            {% endblock %}
+           
+        </div>
+    </div>
+</body>
+</html>
+    

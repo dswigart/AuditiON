@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block Instructions %}
+
+hi {{ request.user.username }}, it's a good day<br>
+    {% if not applicant_list %}
+    you have no applicants
+    {% endif %}
+
+<a href="{% url 'judge_logout' %}">Logout</a><br>
+<a href="{% url 'applicant_selection' %}">Submit Choices</a><br>
+
+{% endblock %}
+
+{% block Content %}
+
+{% for applicant in applicant_list %}
+    <p>{{ applicant.first_name }}
+    {{ applicant.last_name }}
+    <br>
+    {{ applicant.age }}
+    </p>
+{% endfor %}
+{% endblock %}
