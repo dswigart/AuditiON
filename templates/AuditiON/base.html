@@ -12,20 +12,22 @@
         
     </div>
     
-    <div id="Wrapper">
-        <div id="Content">
-            <img src="{% static "AuditiON/Logo.png" %}">
-                <div id="Instructions">
-                    {% block Instructions %}
+    <div id="BigWrapper">
+        <div id="Wrapper">
+            <div id="Content">
+                <img src="{% static "AuditiON/Logo.png" %}">
+                    <div id="Instructions">
+                        {% block Instructions %}
                 
-                    {% endblock %}
-                </div>
+                        {% endblock %}
+                    </div>
                 
-            {% block Content %}
+                {% block Content %}
             
             
-            {% endblock %}
-           
+                {% endblock %}
+                
+            </div>
         </div>
     </div>
 </body>

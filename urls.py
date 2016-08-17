@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^form_success$', views.form_success, name='form_success'),
     url(r'^audition_closed$', views.audition_closed, name='audition_closed'),
     url(r'^database_problem$', views.database_problem, name='database_problem'),
+    url(r'^access_denied$', views.access_denied, name='access_denied'),
                
 ]

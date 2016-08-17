@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block Instructions %}
+<p>Please verify that your information is correct.</p>
+
+<p>Click play on your youtube video below. If it doesn't play on this website, it isn't saved correctly in our database.</p>
+
+<hr>
 {% endblock %}
 
 {% block Content %}
@@ -12,11 +17,12 @@
         {{ field.value }}<br>
         {{ field.as_hidden }}
         {% if field.id_for_label == "id_youtube_link" %}
-            <iframe src="www.youtube.com"></iframe>
+            <iframe src="https://www.youtube.com/embed/{{ field.value }}"></iframe>
             {% endif %}
             
     {% endfor %}
     <br>
     <input type="submit" value="Submit" />
 </form>
+
 {% endblock %}

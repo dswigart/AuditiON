@@ -2,14 +2,19 @@
 
 {% block Instructions %}
 
-hi {{ request.user.username }}, it's a good day<br>
+<p>You are logged in as "{{ request.user.username }}"</p>
+<p>Note that you will not be able to submit choices until
+the audition is closed.</p>
     {% if not applicant_list %}
-    you have no applicants
+    <p>There are no applicants.</p>
     {% endif %}
 
+<p>
 <a href="{% url 'judge_logout' %}">Logout</a><br>
 <a href="{% url 'applicant_selection' %}">Submit Choices</a><br>
+</p>
 
+<hr>
 {% endblock %}
 
 {% block Content %}
@@ -18,7 +23,11 @@ hi {{ request.user.username }}, it's a good day<br>
     <p>{{ applicant.first_name }}
     {{ applicant.last_name }}
     <br>
-    {{ applicant.age }}
+    Age: {{ applicant.age }}
+    <br>
+    <iframe src="https://www.youtube.com/embed/{{applicant.youtube_link}}"></iframe>
     </p>
 {% endfor %}
+
+
 {% endblock %}

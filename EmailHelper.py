@@ -43,7 +43,7 @@ class EmailHelper:
             message = ''
             message += '%s, \n\n' % obj.first_name
             message += '%s\n' % fields.content_body
-            email = EmailMessage(fields.subject_line, message, 'orchestranext@gmail.com',[obj.email_address])
+            email = EmailMessage(fields.subject_line, message, 'dswigart@gmail.com',[obj.email_address])
             messages.append(email)
         return messages
 

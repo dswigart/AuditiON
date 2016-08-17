@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block Instructions %}
- ***this is where instructions go***
+<p>Welcome to AuditiON! Please fill in your information below and submit to be considered for the Orchestra Next 2016-17 season.</p>
+
+<hr>
 {% endblock %}
 
 {% block Content %}
@@ -12,11 +14,17 @@
         <br>
         {{ field.label_tag }}
         <br>
+        {% if field.errors %}
         {{ field.errors }}
+        {% endif %}
+        {% if field.help_text %}
+        {{ field.help_text }}<br>
+        {% endif %}
         {{ field }}
         
     {% endfor %}
     <br>
     <input type="submit" value="Submit" />
 </form>
+
 {% endblock %}

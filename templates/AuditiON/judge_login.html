@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block Instructions %}
-***this is where instructions go***
-{% endblock %}
-
-{% block Content %}
+<p>Welcome ON Judges, please login below.</p>
 
 {% if user == None %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
+{% endblock %}
+
+{% block Content %}
 
 {% if next %}
 {% if user.is_authenticated %}

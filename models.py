@@ -12,20 +12,18 @@ class Applicant(models.Model):
     last_name = models.CharField('Last Name', max_length=30)
     phone_number = models.CharField('Phone Number', max_length=17)
     email_address = models.EmailField('Email Address')
-    street = models.CharField('Street Address', max_length=40)
-    city = models.CharField('City', max_length=40)
-    zip_code = models.PositiveSmallIntegerField('Zip Code')
-    age = models.IntegerField('Age')
+    zip_code = models.CharField('Zip Code', max_length=5)
+    age = models.CharField('Age', max_length=3)
     school = models.CharField('School', max_length=40)
-    instrument = models.CharField('Instrument', max_length=2,
+    instrument = models.CharField('Instrument', max_length=25,
                                     choices=INSTRUMENT_LIST)
     availability = models.CharField('Availability', max_length=6,
-                                    choices=AVAILABILITY_LIST)
+                                    choices=AVAILABILITY_LIST, help_text='Nutcracker: rehearsals on Dec 14 & 15, 7-10pm. Shows on Dec 16 7:30pm, Dec 17 2pm & 7:30pm, Dec 18 2pm. Midsummer Night\'s Dream (2017): rehearsals on Feb 7 7-10pm, Feb 8 7-10pm, Feb 9 7-10pm, Feb 10 7-10pm. Shows on Feb 11 7:30pm, Feb 12 2pm. Snow Queen (2017): rehearsals on Apr 4 7-10pm, Apr 5 7-10pm, Apr 6 7-10pm, Apr 7 7-10pm. Shows on Apr 8 7:30pm, Apr 9 2pm.')
     avail_explain = models.TextField('Availability Explaination',
-                                     default='no info given')
-    youtube_link = models.TextField('YouTube Link', default='no info given',
-                            validators=[RegexValidator('(www.)?youtu(be.com|.be)',
-                                                       'Enter a valid YouTube link')])
+                                     default='All', help_text='If \'some\' was marked above, please note rehearsals or shows you cannot attend and provide a brief explaination.')
+    youtube_link = models.CharField('YouTube Link ID', max_length=20, default='ex. \'64T3yu7Sd\'', help_text='We only need the string that uniquely identify\'s your video. \'https://wwww.youtube.com/watch?v=\' OR \'https://youtu.be/\' should be left out.')
+                            
+    """validators=[RegexValidator('(www.)?youtu(be.com|.be)','Enter a valid YouTube link')])"""
     part = models.CharField(max_length=1, choices=PART_CHOICES, default='Unassigned')
     status = models.CharField(max_length=9, choices=STATUS_CHOICES,
                               default='Rejected')
@@ -68,24 +66,3 @@ class StockEmailData(models.Model):
         return self.email_name
 
 
-
-
-
-
-
-
-class Reporter(models.Model):
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.EmailField()
-
-    def __str__(self):
-        return "%s %s" % (self.first_name, self.last_name)
-
-
-class Article(models.Model):
-    headline = models.CharField(max_length=100)
-    pub_date = models.DateField()
-    reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.headline

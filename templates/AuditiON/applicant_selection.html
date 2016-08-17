@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 
 {% block Instructions %}
+<p>You are logged in as "{{ request.user.username }}"</p>
+{% if request.user.username == 'Violin' %}
+<p>Use "part" to mark accepted/alternate applicant Violin 1 or Violin 2.</p>
+{% elif request.user.username != 'Violin' %}
+<p>Please mark accepted/alternate applicants and submit. Use of "part" to rank applicants is optional.</p>
+{% endif %}
+
+
+<p>
+<a href="{% url 'judge_logout' %}">Logout</a><br>
+</p>
+
+<hr>
 {% endblock %}
 
 {% block Content %}
@@ -21,8 +34,9 @@
                 {{ field }}
             {% endif %}
         {% endfor %}
+        <br>
     {% endfor %}
-    <br>
     <input type="submit" value="Submit" />
 </form>
+
 {% endblock %}

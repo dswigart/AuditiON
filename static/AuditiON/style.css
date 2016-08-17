@@ -1,13 +1,37 @@
 
-#Instructions { background: white;
+body { background-image: url("background.jpeg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: black;
+    background-size: 100% 100%;
+    margin: 0%
+}
+
+#BigWrapper { background: white;
+    margin: auto;
+    width: 85%;
+    min-height: 900px;
     
 }
 
 #Wrapper { 	background: white;
-    margin: 0 auto;
+    margin: auto;
     width: 50%;
     font: Arial;
-    /*height: 900px;*/
+    
+    
+}
+
+#Instructions {
+    padding: 10px 0px 0px 0px;
+    margin: 0px 0px 5px 0px;
+    font-size: 14pt;
+}
+
+label { 
+    font-size: 14pt;
+    
+    
 }
 
 input { margin: 0px 0px 20px 0px;
