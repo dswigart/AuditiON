@@ -67,6 +67,7 @@ def audition_form_confirmation(request):
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
+
 def applicant_confirmation(request):
     """ Accepted applicants confirm or reject their invitation """
     if (request.method == 'GET'):
@@ -82,10 +83,9 @@ def applicant_confirmation(request):
                 return render(request, 'AuditiON/applicant_confirmation.html',
                               {'form':form})
             else:
-                #create confirmed page with reached this in error contact admin message
-                return HttpResponse('FIX THIS')
+                return HttpResponseRedirect(reverse('already_confirmed'))
         else:
-            return HttpResponseRedirect('access_denied')
+            return HttpResponseRedirect(reverse('access_denied'))
 
     elif (request.method == 'POST'):
         Appform = modelform_factory(Applicant, fields=('first_name',
@@ -96,10 +96,11 @@ def applicant_confirmation(request):
             # determine why--dropped down to raw sql.
             cursor = connection.cursor()
             cursor.execute('UPDATE AuditiON_Applicant SET confirmation = %s WHERE code = %s', [form['confirmation'].data, form['code'].data])
-            
             return HttpResponseRedirect('form_success')
+        
+        # the only reason for invalid form is tampering, deny access
         else:
-            return render(request, 'applicant_confirmation', {'form':form})
+            return HttpResponseRedirect(reverse('access_denied'))
 
     else:
         return HttpResponseRedirect(reverse('access_denied'))
@@ -195,9 +196,11 @@ def audition_closed(request):
 def database_problem(request):
     return render(request, 'AuditiON/database_problem.html')
 
+                                            
 def access_denied(request):
     return render(request, 'AuditiON/access_denied.html')
 
-
-
+                                            
+def already_confirmed(request):
+    return render(request, 'AuditiON/already_confirmed.html')
 

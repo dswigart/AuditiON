@@ -23,7 +23,7 @@ class EmailHelper:
         return link
     
     
-    def create_accepted_applicant_confirmation_request(self, applicant_queryset):
+    def accepted_applicant_conf(self, applicant_queryset):
         fields = self._get_fields('test')
         messages = []
         for obj in applicant_queryset:
@@ -36,7 +36,7 @@ class EmailHelper:
         return messages
 
 
-    def create_rejected_applicant_notification(self, applicant_queryset):
+    def rejected_applicant(self, applicant_queryset):
         fields = self._get_fields('test')
         messages = []
         for obj in applicant_queryset:

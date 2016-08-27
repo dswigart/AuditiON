@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block Instructions %}
+<p>Please accept or decline to participate in Orchestra Next:</p>
 
+<hr>
 {% endblock %}
 
 {% block Content %}
@@ -9,7 +11,7 @@
     {% csrf_token %}
     {% for field in form %}
         {% if "name" in field.id_for_label %}
-        Hi {{ field.value }}, please confirm or reject our offer:
+        Hi {{ field.value }}:
             {{ field.as_hidden }}
         {% elif "confirmation" in field.id_for_label %}
             {{ field }}

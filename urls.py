@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^audition_closed$', views.audition_closed, name='audition_closed'),
     url(r'^database_problem$', views.database_problem, name='database_problem'),
     url(r'^access_denied$', views.access_denied, name='access_denied'),
+    url(r'^already_confirmed$', views.already_confirmed, name='already_confirmed')
                
 ]

@@ -5,9 +5,6 @@
 <p>You are logged in as "{{ request.user.username }}"</p>
 <p>Note that you will not be able to submit choices until
 the audition is closed.</p>
-    {% if not applicant_list %}
-    <p>There are no applicants.</p>
-    {% endif %}
 
 <p>
 <a href="{% url 'judge_logout' %}">Logout</a><br>
@@ -18,6 +15,10 @@ the audition is closed.</p>
 {% endblock %}
 
 {% block Content %}
+
+{% if not applicant_list %}
+<p>There are no applicants at this time.</p>
+{% endif %}
 
 {% for applicant in applicant_list %}
     <p>{{ applicant.first_name }}

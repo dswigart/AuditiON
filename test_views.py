@@ -436,3 +436,60 @@ class ApplicantSelectionUnlockedGet(TestCase):
 
 
 
+class ApplicantConfirmationGet(TestCase):
+    """ Test all GET use cases for applicant_confirmation """
+    def setUp(self):
+        applicant = ApplicantForm(VALID_APPLICANT)
+        applicant.save()
+
+
+    # page not should be accessed without code
+    def test_no_code(self):
+        response = self.client.get('/AuditiON/applicant_confirmation')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response._headers['location'][1], '/AuditiON/access_denied')
+    
+
+    # redirect to database_problem
+    def test_bad_code(self):
+        response = self.client.get('/AuditiON/applicant_confirmation/?code=1234567')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response._headers['location'][1], '/AuditiON/database_problem')
+
+
+    # redirect to limit each 'user' to one submit
+    def test_already_confirmed(self):
+        applicant = Applicant.objects.get(instrument='Flute')
+        applicant.confirmation='Accept'
+        applicant.save()
+        
+        url = '/AuditiON/applicant_confirmation/?code=%s' % applicant.code
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response._headers['location'][1], '/AuditiON/already_confirmed')
+
+
+    # ideal use case
+    def test_not_confirmed(self):
+        applicant = Applicant.objects.get(instrument='Flute')
+        applicant.confirmation='Unconfirmed'
+        applicant.save()
+
+        url = '/AuditiON/applicant_confirmation/?code=%s' % applicant.code
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'AuditiON/applicant_confirmation.html')
+
+
+    def tearDown(self):
+        Applicant.objects.all().delete()
+
+
+class ApplicantConfirmationPost(TestCase):
+    """ Test POST use cases for applicant_confirmation """
+    def setUp(self):
+
+
+
