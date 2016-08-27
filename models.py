@@ -24,7 +24,7 @@ class Applicant(models.Model):
     youtube_link = models.CharField('YouTube Link ID', max_length=20, default='ex. \'64T3yu7Sd\'', help_text='We only need the string that uniquely identify\'s your video. \'https://wwww.youtube.com/watch?v=\' OR \'https://youtu.be/\' should be left out.')
                             
     """validators=[RegexValidator('(www.)?youtu(be.com|.be)','Enter a valid YouTube link')])"""
-    part = models.CharField(max_length=1, choices=PART_CHOICES, default='Unassigned')
+    part = models.CharField(max_length=15, choices=PART_CHOICES, default='Unassigned')
     status = models.CharField(max_length=9, choices=STATUS_CHOICES,
                               default='Rejected')
     confirmation = models.CharField(max_length=12, choices=CONFIRMATION_CHOICES,
