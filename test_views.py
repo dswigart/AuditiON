@@ -487,9 +487,15 @@ class ApplicantConfirmationGet(TestCase):
         Applicant.objects.all().delete()
 
 
-class ApplicantConfirmationPost(TestCase):
-    """ Test POST use cases for applicant_confirmation """
-    def setUp(self):
+#class ApplicantConfirmationPost(TestCase):
+#   """ Test POST use cases for applicant_confirmation """
+#   def setUp(self):
+
+
+
+
+
+
 
 
 
