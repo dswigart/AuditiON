@@ -7,14 +7,14 @@ AVAIL_SOME = 'Some'
 #judges in User model.
 FLUTE = 'Flute'
 OBOE = 'Oboe'
-ENGLISHHORN = 'EnglishHorn'
+ENGLISHHORN = 'English Horn'
 CLARINET = 'Clarinet'
-BASSCLARINET = 'BassClarinet'
+BASSCLARINET = 'Bass Clarinet'
 BASSOON = 'Bassoon'
-FRENCHHORN = 'FrenchHorn'
+FRENCHHORN = 'French Horn'
 TRUMPET = 'Trumpet'
 TROMBONE = 'Trombone'
-BASSTROMBONE = 'BassTrombone'
+BASSTROMBONE = 'Bass Trombone'
 TUBA = 'Tuba'
 TIMPANI = 'Timpani'
 PERCUSSION = 'Percussion'
@@ -58,17 +58,24 @@ LOCK = (
         ('Locked', 'Locked'),
         )
 
-PART_CHOICES = (
+RANKING_CHOICES = (
     ('Unassigned', 'Unassigned'),
     ('1', '1'),
     ('2', '2'),
     ('3', '3'),
     ('4', '4'),
     ('5', '5'),
+    ('6', '6'),
+    ('7', '7'),
+    ('8', '8'),
+    ('9', '9'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12'),
     )
 
 STATUS_CHOICES = (
-    ('Rejected', 'Rejected'),
+    ('Declined', 'Declined'),
     ('Accepted', 'Accepted'),
     ('Alternate', 'Alternate'),
     )
@@ -76,5 +83,5 @@ STATUS_CHOICES = (
 CONFIRMATION_CHOICES = (
     ('Unconfirmed', 'Unconfirmed'),
     ('Accept', 'Accept'),
-    ('Reject', 'Reject'),
+    ('Decline', 'Decline'),
     )

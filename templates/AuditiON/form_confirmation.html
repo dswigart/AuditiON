@@ -17,7 +17,7 @@
         {{ field.value }}<br>
         {{ field.as_hidden }}
         {% if field.id_for_label == "id_youtube_link" %}
-            <iframe src="https://www.youtube.com/embed/{{ field.value }}"></iframe>
+            <iframe src="https://www.youtube.com/embed/{{ youtube_string }}"></iframe>
             {% endif %}
             
     {% endfor %}

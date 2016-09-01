@@ -1,7 +1,9 @@
+
 from django.core.mail import EmailMessage
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from AuditiON.models import StockEmailData
+
 
 
 class EmailHelper:
