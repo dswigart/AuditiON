@@ -1,3 +1,4 @@
+import uuid
 
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
@@ -10,6 +11,8 @@ from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Applicant, ApplicantForm, AuditionControl
+import AuditiON.functions as functions
+
 
 
 def index(request):
@@ -33,8 +36,9 @@ def audition_form(request):
     if (request.method == 'POST'):
         form = ApplicantForm(request.POST)
         if form.is_valid():
+            x = functions.youtube_split(form.cleaned_data['youtube_link'])
             return render(request, 'AuditiON/form_confirmation.html',
-                         {'form':form})
+                         {'form':form, 'youtube_string': x})
 
     # first time through, render empty form if audition is open
     else:
@@ -60,6 +64,8 @@ def audition_form_confirmation(request):
     if (request.method == 'POST'):
         form = ApplicantForm(request.POST)
         if form.is_valid():
+            form.instance.youtube_link = functions.youtube_split(form.instance.youtube_link)
+            form.instance.code = uuid.uuid4().hex
             form.save()
             return HttpResponseRedirect(reverse('form_success'))
         else:
@@ -147,8 +153,8 @@ def applicant_list(request):
         return HttpResponseRedirect(reverse('access_denied'))
 
 
-# applicant_list redirects here when judge clicks on 'select
-# applicants' link on applicant_list page
+# applicant_list redirects here when judge clicks on 'submit choices'o
+# link on applicant_list page
 def applicant_selection(request):
     """ Displays applicants by instrument for selection (edit 'status' in db) """
     # set-up to check if judge submission is open or closed
@@ -164,7 +170,7 @@ def applicant_selection(request):
 
     if request.user.is_active:
         if (request.POST):
-            ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status',), extra=0)
+            ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
             set = ApplicantFormSet(request.POST)
             if (set.is_valid):
                 set.save()
@@ -176,7 +182,7 @@ def applicant_selection(request):
             instrument = request.user.username
             
             # building formset
-            ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'part'), extra=0)
+            ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
             set = ApplicantFormSet(queryset=Applicant.objects.filter(
                 instrument__exact=instrument))
             return render(request, 'AuditiON/applicant_selection.html', {'set':set})
@@ -185,6 +191,7 @@ def applicant_selection(request):
 
 
 def form_success(request):
+    logout(request)
     return render(request, 'AuditiON/success.html')
 
 

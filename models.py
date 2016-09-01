@@ -1,10 +1,9 @@
-import uuid
 
 from django.db import models
 from django.forms import ModelForm
 from django.core.validators import RegexValidator
 
-from .constants import AVAILABILITY_LIST, CONFIRMATION_CHOICES, STATUS_CHOICES, INSTRUMENT_LIST, PART_CHOICES, LOCK
+from .constants import AVAILABILITY_LIST, CONFIRMATION_CHOICES, STATUS_CHOICES, INSTRUMENT_LIST, RANKING_CHOICES, LOCK
 
 class Applicant(models.Model):
     """ Main data for Orchestra applicants """
@@ -18,18 +17,16 @@ class Applicant(models.Model):
     instrument = models.CharField('Instrument', max_length=25,
                                     choices=INSTRUMENT_LIST)
     availability = models.CharField('Availability', max_length=6,
-                                    choices=AVAILABILITY_LIST, help_text='Nutcracker: rehearsals on Dec 14 & 15, 7-10pm. Shows on Dec 16 7:30pm, Dec 17 2pm & 7:30pm, Dec 18 2pm. Midsummer Night\'s Dream (2017): rehearsals on Feb 7 7-10pm, Feb 8 7-10pm, Feb 9 7-10pm, Feb 10 7-10pm. Shows on Feb 11 7:30pm, Feb 12 2pm. Snow Queen (2017): rehearsals on Apr 4 7-10pm, Apr 5 7-10pm, Apr 6 7-10pm, Apr 7 7-10pm. Shows on Apr 8 7:30pm, Apr 9 2pm.')
+                                    choices=AVAILABILITY_LIST)
     avail_explain = models.TextField('Availability Explaination',
                                      default='All', help_text='If \'some\' was marked above, please note rehearsals or shows you cannot attend and provide a brief explaination.')
-    youtube_link = models.CharField('YouTube Link ID', max_length=20, default='ex. \'64T3yu7Sd\'', help_text='We only need the string that uniquely identify\'s your video. \'https://wwww.youtube.com/watch?v=\' OR \'https://youtu.be/\' should be left out.')
-                            
-    """validators=[RegexValidator('(www.)?youtu(be.com|.be)','Enter a valid YouTube link')])"""
-    part = models.CharField(max_length=15, choices=PART_CHOICES, default='Unassigned')
-    status = models.CharField(max_length=9, choices=STATUS_CHOICES,
-                              default='Rejected')
+    youtube_link = models.CharField('YouTube Link', max_length=60, help_text='Make sure the video is marked \'Unlisted\'', validators=[RegexValidator('(www.)?youtu(be.com|.be)','Enter a valid YouTube link')])
+    ranking = models.CharField('Ranking', max_length=15, choices=RANKING_CHOICES, default='Unassigned')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES,
+                              default='Declined')
     confirmation = models.CharField(max_length=12, choices=CONFIRMATION_CHOICES,
                                     default='Unconfirmed')
-    code = models.CharField(max_length=40, default=uuid.uuid4().hex)
+    code = models.CharField(max_length=40, blank=True)
     submission_date_time = models.DateTimeField(auto_now_add=True)
     
     
@@ -40,7 +37,7 @@ class Applicant(models.Model):
 class ApplicantForm(ModelForm):
     class Meta:
         model = Applicant
-        exclude = ['status', 'part', 'confirmation', 'code']
+        exclude = ['status', 'ranking', 'confirmation', 'code']
 
 
 class AuditionControl(models.Model):

@@ -6,15 +6,15 @@ from AuditiON.models import AuditionControl, Applicant, ApplicantForm
 
 
 # form data defaults are not included
-VALID_APPLICANT = {'first_name':'Jim', 'last_name':'Brown', 'phone_number':'5621172675','email_address':'jimb@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Flute', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'67e4v5TY', }
+VALID_APPLICANT = {'first_name':'Jim', 'last_name':'Brown', 'phone_number':'5621172675','email_address':'jimb@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Flute', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'https://www.youtube.com/watch?v=Eln3J6BxWN0', }
 
 
 # form data defaults are not included
-VALID_APPLICANT_FLUTE = {'first_name':'Diva', 'last_name':'Girarda', 'phone_number':'5621172675', 'email_address':'jimb@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Flute', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'hf5GY76U8', }
+VALID_APPLICANT_FLUTE = {'first_name':'Diva', 'last_name':'Girarda', 'phone_number':'5621172675', 'email_address':'jimb@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Flute', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'youtube.com/hf5GY76U8', }
 
 
 # form data defaults are not included
-VALID_APPLICANT_TWO = {'first_name':'Steve', 'last_name':'Diant', 'phone_number':'5621172675','email_address':'st@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Trumpet', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'jf5G62S4n', }
+VALID_APPLICANT_TWO = {'first_name':'Steve', 'last_name':'Diant', 'phone_number':'5621172675','email_address':'st@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Trumpet', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'www.youtu.be/jf5G62S4n', }
 
 
 # form data defaults are not included
@@ -418,7 +418,7 @@ class ApplicantSelectionUnlockedGet(TestCase):
         formset = response.context['set']
         app_queryset = formset.get_queryset()
         for x in app_queryset:
-            self.assertEqual(x.status, 'Rejected')
+            self.assertEqual(x.status, 'Declined')
         
         # altering status on one applicant (there are two in the set)
         
