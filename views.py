@@ -195,7 +195,6 @@ def form_success(request):
     return render(request, 'AuditiON/success.html')
 
 
-# 2 redirects here for different reasons, make notes!
 def audition_closed(request):
     return render(request, 'AuditiON/audition_closed.html')
 
