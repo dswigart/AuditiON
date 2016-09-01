@@ -20,6 +20,9 @@
         {% if field.help_text %}
         {{ field.help_text }}<br>
         {% endif %}
+
+        {{ field }}
+
         {% if field.id_for_label == "id_availability" %}
         <br>
         <u>Nutcracker - 2016</u><br>
@@ -42,7 +45,7 @@
         <br>
         
         {% endif %}
-        {{ field }}
+       
         
     {% endfor %}
     <br>

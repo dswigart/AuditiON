@@ -7,6 +7,10 @@ body { background-image: url("background.jpeg");
     margin: 0%
 }
 
+img { display: block;
+    margin: auto;
+}
+
 #BigWrapper { background: white;
     margin: auto;
     width: 85%;
@@ -14,7 +18,7 @@ body { background-image: url("background.jpeg");
     
 }
 
-#Wrapper { 	background: white;
+#Wrapper { background: white;
     margin: auto;
     width: 50%;
     font: Arial;
