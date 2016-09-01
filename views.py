@@ -95,7 +95,7 @@ def applicant_confirmation(request):
             # modelform is executing an INSERT instead of an UPDATE. Unable to
             # determine why--dropped down to raw sql.
             cursor = connection.cursor()
-            cursor.execute('UPDATE AuditiON_Applicant SET confirmation = %s WHERE code = %s', [form['confirmation'].data, form['code'].data])
+            cursor.execute('UPDATE "AuditiON_applicant" SET confirmation = %s WHERE code = %s', [form['confirmation'].data, form['code'].data])
             return HttpResponseRedirect('form_success')
         
         # the only reason for invalid form is tampering, deny access
