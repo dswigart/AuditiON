@@ -36,7 +36,10 @@ def audition_form(request):
     if (request.method == 'POST'):
         form = ApplicantForm(request.POST)
         if form.is_valid():
-            x = functions.youtube_split(form.cleaned_data['youtube_link'])
+            try:
+                x = functions.youtube_split(form.cleaned_data['youtube_link'])
+            except Exception:
+                x = ''
             return render(request, 'AuditiON/form_confirmation.html',
                          {'form':form, 'youtube_string': x})
 

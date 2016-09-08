@@ -20,7 +20,7 @@ class Applicant(models.Model):
                                     choices=AVAILABILITY_LIST)
     avail_explain = models.TextField('Availability Explaination',
                                      default='All', help_text='If \'some\' was marked above, please note rehearsals or shows you cannot attend and provide a brief explaination.')
-    youtube_link = models.CharField('YouTube Link', max_length=60, help_text='Make sure the video is marked \'Unlisted\'', validators=[RegexValidator('(www.)?youtu(be.com|.be)','Enter a valid YouTube link')])
+    youtube_link = models.CharField('YouTube Link', max_length=60, help_text='Make sure the video is marked \'Unlisted\'', validators=[RegexValidator('youtube\.com/watch\?v=\w+|youtu\.be/\w+','Enter a valid YouTube link')])
     ranking = models.CharField('Ranking', max_length=15, choices=RANKING_CHOICES, default='Unassigned')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,
                               default='Declined')
