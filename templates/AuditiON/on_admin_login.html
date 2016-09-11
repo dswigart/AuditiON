@@ -1,0 +1,34 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>Welcome ON Admin, please login below.</p>
+
+{% if user == None %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+{% endblock %}
+
+{% block Content %}
+
+{% if next %}
+{% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed,
+please login with an account that has access.</p>
+{% else %}
+<p>Please login to see this page.</p>
+{% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'judge_login' %}">
+    {% csrf_token %}
+    {{ form.username.label_tag }}
+    {{ form.username }}<br>
+    
+    {{ form.password.label_tag }}
+    {{ form.password }}
+    <br>
+    <input type="submit" value="login" />
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}

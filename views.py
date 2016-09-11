@@ -3,9 +3,8 @@ import uuid
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import logout
 from django.forms import modelformset_factory, modelform_factory
 from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,16 +35,14 @@ def audition_form(request):
     if (request.method == 'POST'):
         form = ApplicantForm(request.POST)
         if form.is_valid():
-            try:
-                x = functions.youtube_split(form.cleaned_data['youtube_link'])
-            except Exception:
-                x = ''
+            x = functions.youtube_split(form.cleaned_data['youtube_link'])
             return render(request, 'AuditiON/form_confirmation.html',
                          {'form':form, 'youtube_string': x})
 
     # first time through, render empty form if audition is open
     else:
         form = ApplicantForm()
+
     return render(request, 'AuditiON/form.html', {'form':form})
 
 
@@ -213,3 +210,34 @@ def access_denied(request):
 def already_confirmed(request):
     return render(request, 'AuditiON/already_confirmed.html')
 
+
+# ----------------------------------------------------------- #
+
+# Administration Views
+
+
+def on_admin_login(request):
+    """ Logs in Admin as User """
+    if (request.method == 'POST'):
+        form = AuthenticationForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('on_admin_home'))
+        else:
+            return render(request, 'AuditiON/on_admin_login.html',
+                          {'form':form, 'user':user})
+    else:
+        form = AuthenticationForm()
+        return render(request, 'AuditiON/on_admin_login.html', {'form':form})
+
+
+def on_admin_home(request):
+    """ Admin home page """
+    if request.user.is_superuser:
+        return(request, 'AuditiON/on_admin_home.html')
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
