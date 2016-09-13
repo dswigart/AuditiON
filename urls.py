@@ -30,6 +30,8 @@ urlpatterns = [
     # Admin urls
                
     url(r'^on_admin_login$', views.on_admin_login, name='on_admin_login'),
+    url(r'^on_admin_logout$', views.on_admin_logout, name='on_admin_logout'),
     url(r'^on_admin_home$', views.on_admin_home, name='on_admin_home'),
+    url(r'^on_admin_db_info$', views.on_admin_db_info, name='on_admin_db_info'),
                
 ]

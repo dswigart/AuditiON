@@ -10,7 +10,7 @@ VALID_APPLICANT = {'first_name':'Jim', 'last_name':'Brown', 'phone_number':'5621
 
 
 # form data defaults are not included
-VALID_APPLICANT_FLUTE = {'first_name':'Diva', 'last_name':'Girarda', 'phone_number':'5621172675', 'email_address':'jimb@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Flute', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'youtube.com/hf5GY76U8', }
+VALID_APPLICANT_FLUTE = {'first_name':'Diva', 'last_name':'Girarda', 'phone_number':'5621172675', 'email_address':'jimb@gsmail.com', 'zip_code':'44672', 'age':'20', 'school':'Lincoln High school', 'instrument':'Flute', 'availability':'All', 'avail_explain':'no info given', 'youtube_link':'youtube.com/watch?v=hf5GY76U8', }
 
 
 # form data defaults are not included

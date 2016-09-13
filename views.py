@@ -10,6 +10,7 @@ from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Applicant, ApplicantForm, AuditionControl
+from .forms import ApplicantInfo
 import AuditiON.functions as functions
 
 
@@ -67,7 +68,7 @@ def audition_form_confirmation(request):
             form.instance.youtube_link = functions.youtube_split(form.instance.youtube_link)
             form.instance.code = uuid.uuid4().hex
             form.save()
-            return HttpResponseRedirect(reverse('form_success'))
+            return HttpResponseRedirect('http://www.orchestranext.com/success')
         else:
             return render(request, 'AuditiON/form.html', {'form':form})
     else:
@@ -237,7 +238,33 @@ def on_admin_login(request):
 
 def on_admin_home(request):
     """ Admin home page """
-    if request.user.is_superuser:
-        return(request, 'AuditiON/on_admin_home.html')
+    if (request.user.is_superuser):
+        return render(request, 'AuditiON/on_admin_home.html')
     else:
         return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_db_info(request):
+    """ Returns filtered applicants for display to superusers """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = ApplicantInfo()
+            return render(request, 'AuditiON/on_admin_db_info.html', {'form':form})
+        if (request.method == 'POST'):
+            form = ApplicantInfo(request.POST)
+            if form.is_valid():
+                set = functions.get_filtered_db_info(form.cleaned_data)
+                #later, put set in score order
+                return render(request, 'AuditiON/on_admin_db_info.html', {'form':form, 'set':set})
+            else:
+                pass
+                    
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_logout(request):
+    """ Logs out superusers """
+    logout(request)
+    return HttpResponseRedirect(reverse('on_admin_login'))
+

@@ -19,22 +19,25 @@ img { display: block;
 }
 
 #Wrapper { background: white;
-    
     width: 900px;
     font: Arial;
-    
-    
+    height: 100%;
+    overflow: auto;
 }
 
 #Content { /*position: relative; left: 200px;*/
     float: right;
     width: 700px;
     margin: 0;
+    background: white;
+  
 }
 
 #Navigation { padding-top: 100px;
-    
+    padding-left: 5px;
+    font-size: 14pt;
 }
+
 #Instructions {
     padding: 10px 0px 0px 0px;
     margin: 0px 0px 5px 0px;

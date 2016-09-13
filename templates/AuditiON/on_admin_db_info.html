@@ -1,0 +1,69 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<hr>
+Use the following filters to refine the data search. To see the entire database, set all filters to the '---' setting.
+<form action="{% url 'on_admin_db_info' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    
+    <br>
+    {{ field.label_tag }}
+    <br>
+    {% if field.errors %}
+    {{ field.errors }}
+    {% endif %}
+    {% if field.help_text %}
+    {{ field.help_text }}<br>
+    {% endif %}
+    
+    {{ field }}
+    
+    {% endfor %}
+    <br>
+    <input type="submit" value="Submit" />
+    </form>
+
+<hr>
+{% endblock %}
+
+{% block Content %}
+<div>
+
+<table>
+    <tr>
+        <th>first name</th>
+        <th>last name</th>
+        <th>availability explaination</th>
+        <th>age</th>
+        <th>confirmation</th>
+        <th>status</th>
+        <th>instrument</th>
+        </tr>
+{% for applicant in set %}
+
+
+        <tr>
+    <td>{{ applicant.first_name }}</td>
+    <td>{{ applicant.last_name }}</td>
+    <td>{{ applicant.avail_explain }}</td>
+    <td>{{ applicant.age }}</td>
+    <td>{{ applicant.confirmation }}</td>
+    <td>{{ applicant.status }}</td>
+    <td>{{ applicant.instrument }}</td>
+   
+   </tr>
+
+
+{% endfor %}
+
+</table>
+
+{% if not set %}
+<p>There are no applicants at this time.</p>
+{% endif %}
+hellooooooooooo
+</div>
+{% endblock %}
+

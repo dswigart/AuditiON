@@ -53,6 +53,15 @@ INSTRUMENT_LIST = (
     (BASS, BASS),
     )
 
+
+def ADD_IGNORE(tuple):
+    list = []
+    list.append(('Ignore', '---'))
+    for x in tuple:
+        list.append(x)
+    return list
+
+
 LOCK = (
         ('Unlocked', 'Unlocked'),
         ('Locked', 'Locked'),
