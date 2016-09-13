@@ -35,23 +35,32 @@ Use the following filters to refine the data search. To see the entire database,
     <tr>
         <th>first name</th>
         <th>last name</th>
-        <th>availability explaination</th>
         <th>age</th>
-        <th>confirmation</th>
-        <th>status</th>
+        <th>zip</th>
         <th>instrument</th>
+        <th>ranking</th>
+        <th>email</th>
+        <th>availability</th>
+        <th>explaination</th>
+        <th>status</th>
+        <th>confirmation</th>
+        <th>youtube link</th>
         </tr>
 {% for applicant in set %}
 
-
-        <tr>
+    <tr>
     <td>{{ applicant.first_name }}</td>
     <td>{{ applicant.last_name }}</td>
-    <td>{{ applicant.avail_explain }}</td>
     <td>{{ applicant.age }}</td>
-    <td>{{ applicant.confirmation }}</td>
-    <td>{{ applicant.status }}</td>
+    <td>{{ applicant.zip_code }}</td>
     <td>{{ applicant.instrument }}</td>
+    <td>{{ applicant.ranking }}</td>
+    <td>{{ applicant.email_address }}</td>
+    <td>{{ applicant.availability }}</td>
+    <td>{{ applicant.avail_explain }}</td>
+    <td>{{ applicant.status }}</td>
+    <td>{{ applicant.confirmation }}</td>
+    <td><a href="https://www.youtube.com/watch?v={{ applicant.youtube_link }}" target="_blank">Logout</a></td>
    
    </tr>
 
@@ -61,9 +70,9 @@ Use the following filters to refine the data search. To see the entire database,
 </table>
 
 {% if not set %}
-<p>There are no applicants at this time.</p>
+<p>There are no applicants or you haven't submitted a query</p>
 {% endif %}
-hellooooooooooo
+
 </div>
 {% endblock %}
 

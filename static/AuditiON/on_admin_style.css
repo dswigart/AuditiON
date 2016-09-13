@@ -13,13 +13,13 @@ img { display: block;
 
 #BigWrapper { background: white;
     margin: auto;
-    width: 900px;
+    width: 1100px;
     min-height: 900px;
     
 }
 
 #Wrapper { background: white;
-    width: 900px;
+    width: 1100px;
     font: Arial;
     height: 100%;
     overflow: auto;
@@ -27,7 +27,7 @@ img { display: block;
 
 #Content { /*position: relative; left: 200px;*/
     float: right;
-    width: 700px;
+    width: 950px;
     margin: 0;
     background: white;
   
@@ -36,6 +36,7 @@ img { display: block;
 #Navigation { padding-top: 100px;
     padding-left: 5px;
     font-size: 14pt;
+    width: 150px;
 }
 
 #Instructions {
