@@ -44,7 +44,7 @@ Use the following filters to refine the data search. To see the entire database,
         <th>explaination</th>
         <th>status</th>
         <th>confirmation</th>
-        <th>youtube link</th>
+        <th>video</th>
         </tr>
 {% for applicant in set %}
 
@@ -60,7 +60,7 @@ Use the following filters to refine the data search. To see the entire database,
     <td>{{ applicant.avail_explain }}</td>
     <td>{{ applicant.status }}</td>
     <td>{{ applicant.confirmation }}</td>
-    <td><a href="https://www.youtube.com/watch?v={{ applicant.youtube_link }}" target="_blank">Logout</a></td>
+    <td><a href="https://www.youtube.com/watch?v={{ applicant.youtube_link }}" target="_blank">watch</a></td>
    
    </tr>
 
