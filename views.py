@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import modelformset_factory, modelform_factory
 from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 
 from .models import Applicant, ApplicantForm, AuditionControl
 from .forms import ApplicantInfo
@@ -68,6 +69,10 @@ def audition_form_confirmation(request):
             form.instance.youtube_link = functions.youtube_split(form.instance.youtube_link)
             form.instance.code = uuid.uuid4().hex
             form.save()
+            try:
+                send_mail('Application Submitted', '%s %s, %s' % (form.instance.first_name, form.instance.last_name, form.instance.instrument), 'orchestranext@gmail.com', ['orchestranext@gmail.com'], fail_silently=True,)
+            except Exception:
+                pass
             return HttpResponseRedirect('http://www.orchestranext.com/success')
         else:
             return render(request, 'AuditiON/form.html', {'form':form})
