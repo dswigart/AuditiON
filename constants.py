@@ -84,6 +84,7 @@ RANKING_CHOICES = (
     )
 
 STATUS_CHOICES = (
+    ('Undetermined', 'Undetermined'),
     ('Declined', 'Declined'),
     ('Accepted', 'Accepted'),
     ('Alternate', 'Alternate'),
