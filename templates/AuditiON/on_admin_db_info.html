@@ -31,43 +31,52 @@ Use the following filters to refine the data search. To see the entire database,
 {% block Content %}
 <div>
 
+{% for applicant in set %}
 <table>
     <tr>
-        <th>first name</th>
-        <th>last name</th>
-        <th>age</th>
-        <th>zip</th>
-        <th>instrument</th>
-        <th>ranking</th>
-        <th>email</th>
-        <th>availability</th>
-        <th>explaination</th>
-        <th>status</th>
-        <th>confirmation</th>
-        <th>video</th>
-        </tr>
-{% for applicant in set %}
-
+        <td class="tablelabel"><b>Name</b></td>
+        <td class="tablevalue"><b>{{ applicant.first_name }} {{ applicant.last_name }}</b></td>
+        <td id="tableavail" rowspan="10">{{ applicant.avail_explain }}</td>
+    </tr>
     <tr>
-    <td>{{ applicant.first_name }}</td>
-    <td>{{ applicant.last_name }}</td>
-    <td>{{ applicant.age }}</td>
-    <td>{{ applicant.zip_code }}</td>
-    <td>{{ applicant.instrument }}</td>
-    <td>{{ applicant.ranking }}</td>
-    <td>{{ applicant.email_address }}</td>
-    <td>{{ applicant.availability }}</td>
-    <td>{{ applicant.avail_explain }}</td>
-    <td>{{ applicant.status }}</td>
-    <td>{{ applicant.confirmation }}</td>
-    <td><a href="https://www.youtube.com/watch?v={{ applicant.youtube_link }}" target="_blank">watch</a></td>
-   
-   </tr>
-
-
-{% endfor %}
-
+        <td class="tablelabel">email</td>
+        <td class="tablevalue">{{ applicant.email_address }}</td>
+       
+    </tr>
+    <tr>
+        <td class="tablelabel">confirmation</td>
+        <td class="tablevalue">{{ applicant.confirmation }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">status</td>
+        <td class="tablevalue">{{ applicant.status }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">instrument</td>
+        <td class="tablevalue">{{ applicant.instrument }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">age</td>
+        <td class="tablevalue">{{ applicant.age }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">availability</td>
+        <td class="tablevalue">{{ applicant.availability }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">ranking</td>
+        <td class="tablevalue">{{ applicant.ranking }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">zip</td>
+        <td class="tablevalue">{{ applicant.zip_code }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">video</td>
+        <td class="tablevalue"><a href="https://www.youtube.com/watch?v={{ applicant.youtube_link }}" target="_blank">www.youtu.be/{{ applicant.youtube_link }}</a></td>
+    </tr>
 </table>
+{% endfor %}
 
 {% if not set %}
 <p>There are no applicants or you haven't submitted a query</p>
