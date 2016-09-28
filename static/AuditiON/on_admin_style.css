@@ -48,7 +48,7 @@ img { display: block;
 table { border: 1px solid #000; border-collapse: collapse;
     margin-top: 10px; font-size: 14pt;}
 
-td { width: 175px;border: 1px solid #000; padding-left: 3px;}
+td { border: 1px solid #000; padding-left: 3px;}
 
 #tableavail { width: 400px;}
 .tablelabel { width: 120px;}

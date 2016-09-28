@@ -30,7 +30,12 @@ Use the following filters to refine the data search. To see the entire database,
 
 {% block Content %}
 <div>
+   
+{% for applicant in set %}
+{{ applicant.email_address }},
+{% endfor %}
 
+<hr>
 {% for applicant in set %}
 <table>
     <tr>
