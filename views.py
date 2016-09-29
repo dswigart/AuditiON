@@ -1,4 +1,5 @@
 import uuid
+import csv
 
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
@@ -264,6 +265,23 @@ def on_admin_db_info(request):
             else:
                 pass
                     
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_data(request):
+    if (request.user.is_superuser):
+    # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="ONdatabase.csv"'
+        data = Applicant.objects.all()
+    
+        writer = csv.writer(response)
+        writer.writerow(['First Name', 'Last Name', 'Phone Number', 'Email Address', 'Zip Code', 'Age', 'School', 'Instrument', 'Availability', 'Availability Explaination', 'Youtube Link', 'Ranking', 'Status', 'Confirmation',])
+        for x in data:
+            writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, x.youtube_link, x.ranking, x.status, x.confirmation,])
+        return response
+            
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
