@@ -151,7 +151,7 @@ def applicant_list(request):
         # looking up all applicants whose instrument matches username
         instrument = request.user.username
         try:
-            applicant_list = Applicant.objects.filter(instrument__exact=instrument)
+            applicant_list = Applicant.objects.filter(instrument__exact=instrument).order_by('last_name')
         except (ObjectDoesNotExist):
             return HttpResponseRedirect(reverse('database_problem'))
         applicant_count = applicant_list.count()
@@ -191,7 +191,7 @@ def applicant_selection(request):
             # building formset
             ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
             set = ApplicantFormSet(queryset=Applicant.objects.filter(
-                instrument__exact=instrument))
+                instrument__exact=instrument).order_by('last_name'))
             return render(request, 'AuditiON/applicant_selection.html', {'set':set})
     else:
         return HttpResponseRedirect(reverse('access_denied'))
