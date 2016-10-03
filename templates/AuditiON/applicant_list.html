@@ -5,6 +5,7 @@
 <p>You are logged in as "{{ request.user.username }}"</p>
 <p>Note that you will not be able to submit choices until
 the audition is closed.</p>
+<p>{{ request.user.username }} submissions total: {{ applicant_count }}</p>
 
 <p>
 <a href="{% url 'judge_logout' %}">Logout</a><br>
@@ -31,6 +32,6 @@ the audition is closed.</p>
     <iframe src="https://www.youtube.com/embed/{{applicant.youtube_link}}" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
     </p>
 {% endfor %}
-
+<br>
 
 {% endblock %}

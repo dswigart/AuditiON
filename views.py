@@ -154,8 +154,8 @@ def applicant_list(request):
             applicant_list = Applicant.objects.filter(instrument__exact=instrument)
         except (ObjectDoesNotExist):
             return HttpResponseRedirect(reverse('database_problem'))
-        
-        return render(request, 'AuditiON/applicant_list.html', {'applicant_list':applicant_list})
+        applicant_count = applicant_list.count()
+        return render(request, 'AuditiON/applicant_list.html', {'applicant_list':applicant_list, 'applicant_count':applicant_count})
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
@@ -245,7 +245,8 @@ def on_admin_login(request):
 def on_admin_home(request):
     """ Admin home page """
     if (request.user.is_superuser):
-        return render(request, 'AuditiON/on_admin_home.html')
+        count = Applicant.objects.count()
+        return render(request, 'AuditiON/on_admin_home.html', {'count':count})
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
@@ -255,13 +256,15 @@ def on_admin_db_info(request):
     if (request.user.is_superuser):
         if (request.method == 'GET'):
             form = ApplicantInfo()
-            return render(request, 'AuditiON/on_admin_db_info.html', {'form':form})
+            count = Applicant.objects.count()
+            return render(request, 'AuditiON/on_admin_db_info.html', {'form':form, 'count':count})
         if (request.method == 'POST'):
             form = ApplicantInfo(request.POST)
             if form.is_valid():
                 set = functions.get_filtered_db_info(form.cleaned_data)
+                count = Applicant.objects.count()
                 #later, put set in score order
-                return render(request, 'AuditiON/on_admin_db_info.html', {'form':form, 'set':set})
+                return render(request, 'AuditiON/on_admin_db_info.html', {'form':form, 'set':set, 'count':count})
             else:
                 pass
                     
@@ -279,7 +282,7 @@ def on_admin_data(request):
         writer = csv.writer(response)
         writer.writerow(['First Name', 'Last Name', 'Phone Number', 'Email Address', 'Zip Code', 'Age', 'School', 'Instrument', 'Availability', 'Availability Explaination', 'Youtube Link', 'Ranking', 'Status', 'Confirmation',])
         for x in data:
-            writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, x.youtube_link, x.ranking, x.status, x.confirmation,])
+            writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, 'https://youtu.be/' +  x.youtube_link, x.ranking, x.status, x.confirmation,])
         return response
             
     else:

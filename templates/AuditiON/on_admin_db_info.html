@@ -2,6 +2,7 @@
 
 {% block Instructions %}
 <p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
 <hr>
 <h2>Filters</h2>
 Use the following filters to refine the data search. To see the entire database, set all filters to the '---' setting.
@@ -45,7 +46,7 @@ Use the following filters to refine the data search. To see the entire database,
     <tr>
         <td class="tablelabel"><b>Name</b></td>
         <td class="tablevalue"><b>{{ applicant.first_name }} {{ applicant.last_name }}</b></td>
-        <td id="tableavail" rowspan="10">{{ applicant.avail_explain }}</td>
+        <td id="tableavail" rowspan="11">{{ applicant.avail_explain }}</td>
     </tr>
     <tr>
         <td class="tablelabel">email</td>
@@ -81,6 +82,10 @@ Use the following filters to refine the data search. To see the entire database,
         <td class="tablevalue">{{ applicant.zip_code }}</td>
     </tr>
     <tr>
+        <td class="tablelabel">phone</td>
+        <td class="tablevalue">{{ applicant.phone_number }}</td>
+    </tr>
+    <tr>
         <td class="tablelabel">video</td>
         <td class="tablevalue"><a href="https://www.youtube.com/watch?v={{ applicant.youtube_link }}" target="_blank">www.youtu.be/{{ applicant.youtube_link }}</a></td>
     </tr>
@@ -92,5 +97,8 @@ Use the following filters to refine the data search. To see the entire database,
 {% endif %}
 
 </div>
+
+<br>
+<br>
 {% endblock %}
 

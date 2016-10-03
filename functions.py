@@ -32,4 +32,7 @@ def get_filtered_db_info(data):
         query = query.filter(confirmation__exact=data['confirmation'])
     if (data['availability'] != 'Ignore'):
         query = query.filter(availability__exact=data['availability'])
+
+    query = query.order_by('last_name')
+
     return query
