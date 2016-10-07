@@ -274,9 +274,11 @@ def on_admin_db_info(request):
 
 def on_admin_data(request):
     if (request.user.is_superuser):
-    # Create the HttpResponse object with the appropriate CSV header.
+        #Create the HttpResponse object with the appropriate CSV header.
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="ONdatabase.csv"'
+        
+        #all applicants in database
         data = Applicant.objects.all()
     
         writer = csv.writer(response)
@@ -285,6 +287,29 @@ def on_admin_data(request):
             writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, 'https://youtu.be/' +  x.youtube_link, x.ranking, x.status, x.confirmation,])
         return response
             
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_accepted_confirmed(request):
+    if (request.user.is_superuser):
+        #Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="accepted_alternate_confirmed.csv"'
+        
+        #filter accepted and alternates who have confirmed
+        accepted = Applicant.objects.filter(status__contains='Accepted').filter(confirmation__exact='Accept')
+        alternate = Applicant.objects.filter(status__contains='Alternate').filter(confirmation__exact='Accept')
+        
+        writer = csv.writer(response)
+        writer.writerow(['First Name', 'Last Name', 'Phone Number', 'Email Address', 'Zip Code', 'Age', 'School', 'Instrument', 'Availability', 'Availability Explaination', 'Youtube Link', 'Ranking', 'Status', 'Confirmation',])
+        for x in accepted:
+            writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, 'https://youtu.be/' +  x.youtube_link, x.ranking, x.status, x.confirmation,])
+        writer.writerow('\n')
+        for x in alternate:
+            writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, 'https://youtu.be/' +  x.youtube_link, x.ranking, x.status, x.confirmation,])
+        return response
+    
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 

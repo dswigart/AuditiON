@@ -32,15 +32,22 @@ Use the following filters to refine the data search. To see the entire database,
 
 {% block Content %}
 <div>
-<h2>Quick Tools</h2>
-<p><a href="{% url 'on_admin_data' %}">Click to download entire database as spreadsheet</a></p>
-<p>Click to display email list for current query (doesn't work yet, email's are displayed below)</p>
-{% for applicant in set %}
-{{ applicant.email_address }},
-{% endfor %}
+    
+    <h2>Quick Tools</h2>
+
+    <p><a href="{% url 'on_admin_data' %}">Click to download entire database as spreadsheet</a></p>
+
+    <p><a href="{% url 'on_admin_accepted_confirmed' %}">Click to download accepted/alternate applicants who have confirmed as spreadsheet</a></p>
+    <p>Click to display email list for current query (doesn't work yet, email's are displayed below)</p>
+
+    {% for applicant in set %}
+    {{ applicant.email_address }},
+    {% endfor %}
 
 <hr>
+
 <h2>Database Query</h2>
+
 {% for applicant in set %}
 <table>
     <tr>

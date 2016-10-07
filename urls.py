@@ -34,5 +34,5 @@ urlpatterns = [
     url(r'^on_admin_home$', views.on_admin_home, name='on_admin_home'),
     url(r'^on_admin_db_info$', views.on_admin_db_info, name='on_admin_db_info'),
     url(r'^on_admin_data$', views.on_admin_data, name='on_admin_data'),
-               
+    url(r'^on_admin_accepted_confirmed$', views.on_admin_accepted_confirmed, name='on_admin_accepted_confirmed'),
 ]
