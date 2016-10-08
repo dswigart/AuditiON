@@ -92,8 +92,9 @@ def applicant_confirmation(request):
                 return HttpResponseRedirect(reverse('database_problem'))
             if (x.confirmation == 'Unconfirmed'):
                 form = Appform(instance=x)
+                first_name = form.instance.first_name
                 return render(request, 'AuditiON/applicant_confirmation.html',
-                              {'form':form})
+                              {'form':form, 'first_name':first_name,})
             else:
                 return HttpResponseRedirect(reverse('already_confirmed'))
         else:
