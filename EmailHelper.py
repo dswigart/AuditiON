@@ -31,7 +31,7 @@ class EmailHelper:
         for obj in applicant_queryset:
             message = ''
             message += 'Dear %s,\n\n' % obj.first_name
-            message += '%s\n' % fields.content_body
+            message += '%s\n\n' % fields.content_body
             message += self._process_confirmation_link(obj.code)
             message += '\n\nCheers,\n\nBrian McWhorter, music director\nSarah Viens, trumpet/administration\nwww.orchestranext.com'
             email = EmailMessage(fields.subject_line, message, 'orchestranext@gmail.com',[obj.email_address])
