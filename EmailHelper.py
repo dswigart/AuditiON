@@ -20,19 +20,20 @@ class EmailHelper:
 
 
     def _process_confirmation_link(self, code):
-        link = 'http://localhost:8000/AuditiON/applicant_confirmation/'
+        link = 'https://www.sarahviens.com/AuditiON/applicant_confirmation/'
         link += '?code=%s' % code
         return link
     
     
     def accepted_applicant_conf(self, applicant_queryset):
-        fields = self._get_fields('test')
+        fields = self._get_fields('accepted')
         messages = []
         for obj in applicant_queryset:
             message = ''
-            message += '%s,\n\n' % obj.first_name
+            message += 'Dear %s,\n\n' % obj.first_name
             message += '%s\n' % fields.content_body
             message += self._process_confirmation_link(fields.code)
+            message += '\nCheers,\nBrian McWhorter, music director\nSarah Viens, trumpet/administration\nwww.orchestranext.com'
             email = EmailMessage(fields.subject_line, message, 'orchestranext@gmail.com',[obj.email_address])
             messages.append(email)
         return messages

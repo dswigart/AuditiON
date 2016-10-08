@@ -59,6 +59,7 @@ class ApplicantFormUnlocked(TestCase):
         self.assertTemplateUsed(response, 'AuditiON/form.html')
         self.assertContains(response, 'errorlist')
     
+    
     # form is valid, loads confirmation page
     def test_audition_form_valid_post(self):
      
@@ -259,6 +260,7 @@ class JudgeLogout(TestCase):
     def setUp(self):
         current_user = User.objects.create_user('Flute','dswigart@gmail.com','12345')
     
+    
     # Redirect back to login page
     def test_user_logout(self):
         # Verify login
@@ -272,6 +274,7 @@ class JudgeLogout(TestCase):
         
         # Verify logout
         self.assertEqual(self.client.session.items(), [])
+
 
     # Redirect back to login page
     def test_user_already_logged_out(self):
@@ -379,6 +382,7 @@ class ApplicantSelectionUnlockedGet(TestCase):
         applicant = ApplicantForm(VALID_APPLICANT_FLUTE)
         applicant.save()
     
+    
     # Redirect to access_denied
     def test_user_not_logged_in(self):
         response = self.client.get('/AuditiON/applicant_selection')
@@ -428,12 +432,10 @@ class ApplicantSelectionUnlockedGet(TestCase):
         self.assertNotEqual(applicant[0].status, applicant[1].status)
     
 
-
     def tearDown(self):
         Applicant.objects.all().delete()
         User.objects.all().delete()
         AuditionControl.objects.all().delete()
-
 
 
 class ApplicantConfirmationGet(TestCase):
@@ -485,17 +487,4 @@ class ApplicantConfirmationGet(TestCase):
 
     def tearDown(self):
         Applicant.objects.all().delete()
-
-
-#class ApplicantConfirmationPost(TestCase):
-#   """ Test POST use cases for applicant_confirmation """
-#   def setUp(self):
-
-
-
-
-
-
-
-
 

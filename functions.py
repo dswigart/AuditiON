@@ -23,6 +23,7 @@ def youtube_split(link):
 
 
 def get_filtered_db_info(data):
+    """ Filters info for db_info page display """
     query = Applicant.objects.all()
     if (data['instrument'] != 'Ignore'):
         query = query.filter(instrument__exact=data['instrument'])

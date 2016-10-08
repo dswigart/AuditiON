@@ -37,6 +37,7 @@ class Applicant(models.Model):
 class ApplicantForm(ModelForm):
     class Meta:
         model = Applicant
+        #change to 'include' style when first audition is over 
         exclude = ['status', 'ranking', 'confirmation', 'code']
 
 

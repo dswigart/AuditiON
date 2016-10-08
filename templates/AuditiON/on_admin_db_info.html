@@ -3,31 +3,35 @@
 {% block Instructions %}
 <p>You're logged in as {{ request.user.username }}</p>
 <p>{{ count }} applicants in the database.</p>
+
 <hr>
+
 <h2>Filters</h2>
+
 Use the following filters to refine the data search. To see the entire database, set all filters to the '---' setting.
+
 <form action="{% url 'on_admin_db_info' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
+        <br>
+        {{ field.label_tag }}
+        <br>
+        {% if field.errors %}
+            {{ field.errors }}
+        {% endif %}
+        {% if field.help_text %}
+            {{ field.help_text }}<br>
+        {% endif %}
     
-    <br>
-    {{ field.label_tag }}
-    <br>
-    {% if field.errors %}
-    {{ field.errors }}
-    {% endif %}
-    {% if field.help_text %}
-    {{ field.help_text }}<br>
-    {% endif %}
-    
-    {{ field }}
+        {{ field }}
     
     {% endfor %}
     <br>
     <input type="submit" value="Submit" />
-    </form>
+</form>
 
 <hr>
+
 {% endblock %}
 
 {% block Content %}
@@ -35,13 +39,14 @@ Use the following filters to refine the data search. To see the entire database,
     
     <h2>Quick Tools</h2>
 
-    <p><a href="{% url 'on_admin_data' %}">Click to download entire database as spreadsheet</a></p>
+    <p><a href="{% url 'on_admin_data' %}">Download entire database as spreadsheet</a></p>
 
-    <p><a href="{% url 'on_admin_accepted_confirmed' %}">Click to download accepted/alternate applicants who have confirmed as spreadsheet</a></p>
+    <p><a href="{% url 'on_admin_accepted_confirmed' %}">Download accepted/alternate applicants who have confirmed as spreadsheet</a></p>
+    
     <p>Click to display email list for current query (doesn't work yet, email's are displayed below)</p>
 
     {% for applicant in set %}
-    {{ applicant.email_address }},
+        {{ applicant.email_address }},
     {% endfor %}
 
 <hr>
@@ -58,7 +63,6 @@ Use the following filters to refine the data search. To see the entire database,
     <tr>
         <td class="tablelabel">email</td>
         <td class="tablevalue">{{ applicant.email_address }}</td>
-       
     </tr>
     <tr>
         <td class="tablelabel">confirmation</td>
@@ -75,6 +79,10 @@ Use the following filters to refine the data search. To see the entire database,
     <tr>
         <td class="tablelabel">age</td>
         <td class="tablevalue">{{ applicant.age }}</td>
+    </tr>
+    <tr>
+        <td class="tablelabel">school</td>
+        <td class="tablevalue">{{ applicant.school }}</td>
     </tr>
     <tr>
         <td class="tablelabel">availability</td>
@@ -100,12 +108,13 @@ Use the following filters to refine the data search. To see the entire database,
 {% endfor %}
 
 {% if not set %}
-<p>There are no applicants or you haven't submitted a query</p>
+    <p>There are no applicants or you haven't submitted a query</p>
 {% endif %}
 
 </div>
 
 <br>
 <br>
+
 {% endblock %}
 

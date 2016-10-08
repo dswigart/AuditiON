@@ -16,7 +16,6 @@ from .forms import ApplicantInfo
 import AuditiON.functions as functions
 
 
-
 def index(request):
     return HttpResponseRedirect(reverse('audition_form'))
 
@@ -160,7 +159,7 @@ def applicant_list(request):
         return HttpResponseRedirect(reverse('access_denied'))
 
 
-# applicant_list redirects here when judge clicks on 'submit choices'o
+# applicant_list redirects here when judge clicks on 'submit choices'
 # link on applicant_list page
 def applicant_selection(request):
     """ Displays applicants by instrument for selection (edit 'status' in db) """
@@ -219,7 +218,6 @@ def already_confirmed(request):
 
 
 # ----------------------------------------------------------- #
-
 # Administration Views
 
 
@@ -267,12 +265,12 @@ def on_admin_db_info(request):
                 return render(request, 'AuditiON/on_admin_db_info.html', {'form':form, 'set':set, 'count':count})
             else:
                 pass
-                    
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
 
 def on_admin_data(request):
+    """ Create CSV of all applicants for download """
     if (request.user.is_superuser):
         #Create the HttpResponse object with the appropriate CSV header.
         response = HttpResponse(content_type='text/csv')
@@ -286,12 +284,12 @@ def on_admin_data(request):
         for x in data:
             writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, 'https://youtu.be/' +  x.youtube_link, x.ranking, x.status, x.confirmation,])
         return response
-            
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
 
 def on_admin_accepted_confirmed(request):
+    """ Create CSB of accepted/alternate applicants who have confirmed for download """
     if (request.user.is_superuser):
         #Create the HttpResponse object with the appropriate CSV header.
         response = HttpResponse(content_type='text/csv')
@@ -309,7 +307,6 @@ def on_admin_accepted_confirmed(request):
         for x in alternate:
             writer.writerow([x.first_name, x.last_name, x.phone_number, x.email_address, x.zip_code, x.age, x.school, x.instrument, x.availability, x.avail_explain, 'https://youtu.be/' +  x.youtube_link, x.ranking, x.status, x.confirmation,])
         return response
-    
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 

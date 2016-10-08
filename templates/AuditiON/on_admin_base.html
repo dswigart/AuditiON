@@ -12,8 +12,8 @@
         
     </div>
     <div id="BigWrapper">
-     <div id="Wrapper">
-                <div id="Content">
+        <div id="Wrapper">
+            <div id="Content">
                 <img src="{% static "AuditiON/Logo.png" %}">
                     <div id="Instructions">
                         {% block Instructions %}
@@ -23,19 +23,16 @@
                 
                 {% block Content %}
             
-            
                 {% endblock %}
                 
-               
             </div>
             <div id="Navigation">
                 <p><a href="{% url 'on_admin_logout' %}">Logout</a></p>
                 <p><a href="{% url 'on_admin_home' %}">Admin Home</a></p>
-                 <p><a href="{% url 'on_admin_db_info' %}">Database Info</a></p>
+                <p><a href="{% url 'on_admin_db_info' %}">Database Info</a></p>
             
             </div>
-      </div>
-      
+        </div>
     </div>
 </body>
 </html>
