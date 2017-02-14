@@ -1,0 +1,39 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+<h2>Edit Principal</h2>
+
+
+<form action="{% url 'on_admin_edit_principal' %}" method="post">
+    {% csrf_token %}
+    
+    {% for field in form %}
+    {% if 'code' in field.id_for_label %}
+    {{ field.as_hidden }}
+    {% else %}
+    {{ field.label_tag }}
+    {{ field.errors }}
+    <br>
+    {{field}}
+    <br>
+    {% endif %}
+    {% endfor %}
+    
+    <input type="submit" value="Submit" />
+</form>
+
+<hr>
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+{% endblock %}
+

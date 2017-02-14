@@ -1,0 +1,30 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+<p><a href="{% url 'on_admin_create_production' %}">Create New Production</a></p>
+
+
+<hr>
+<h2>Productions in the Database:</h2>
+{% for field in form %}
+
+{{ field.name }}
+<br>
+{% endfor %}
+
+
+
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+
+{% endblock %}

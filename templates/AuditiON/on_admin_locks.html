@@ -1,0 +1,38 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+
+
+<hr>
+<h2>Locks:</h2>
+
+<form action="{% url 'on_admin_locks' %}" method="post">
+    {% csrf_token %}
+    
+    {% for field in form %}
+    {% if "name" in field.id_for_label %}
+        {{ field.as_hidden }}
+    {% else %}
+        {{ field.label_tag }}
+        {{ field.errors }}
+        {{ field }}
+    {% endif %}
+    <br>
+    {% endfor %}
+    
+    <input type="submit" value="Submit" />
+</form>
+
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+
+{% endblock %}
+

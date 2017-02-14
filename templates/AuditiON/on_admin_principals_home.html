@@ -1,0 +1,32 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+<p><a href="{% url 'on_admin_create_principal' %}">Create New Principal</a></p>
+<p><a href="{% url 'on_admin_delete_principal' %}">Delete Principal</a></p><p><a href="{% url 'on_admin_edit_principal_select' %}">Edit Principal</a></p>
+
+<hr>
+<h2>Principals in the Database:</h2>
+{% for field in form %}
+
+{{ field.first_name }}
+{{ field.last_name }},
+{{ field.instrument }}
+<br>
+{% endfor %}
+
+
+
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+
+{% endblock %}

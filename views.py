@@ -4,15 +4,17 @@ import csv
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import modelformset_factory, modelform_factory
 from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 
-from .models import Applicant, ApplicantForm, AuditionControl
-from .forms import ApplicantInfo
+from AuditiON.models import Applicant, ApplicantForm, CreateInstrument, AuditionControl, Instruments, Production, ApplicantEditForm, Principal, CreatePrincipal, PrincipalEditForm, ProductionForm, Rehearsal, RehearsalForm
+from AuditiON.forms import ApplicantInfo, CreateJudge, DeleteJudge, ChangeJudgeEmail, ChangeJudgePassword, AssociateJudge, Locks, DeleteApplicant, SelectApplicant, DeletePrincipal, SelectPrincipal
 import AuditiON.functions as functions
 
 
@@ -69,10 +71,10 @@ def audition_form_confirmation(request):
             form.instance.youtube_link = functions.youtube_split(form.instance.youtube_link)
             form.instance.code = uuid.uuid4().hex
             form.save()
-            try:
-                send_mail('Application Submitted', '%s %s, %s' % (form.instance.first_name, form.instance.last_name, form.instance.instrument), 'orchestranext@gmail.com', ['orchestranext@gmail.com'], fail_silently=True,)
-            except Exception:
-                pass
+                #try:
+                #  send_mail('Application Submitted', '%s %s, %s' % (form.instance.first_name, form.instance.last_name, form.instance.instrument), 'orchestranext@gmail.com', ['orchestranext@gmail.com'], fail_silently=True,)
+                #except Exception:
+                #    pass
             return HttpResponseRedirect('http://www.orchestranext.com/success')
         else:
             return render(request, 'AuditiON/form.html', {'form':form})
@@ -148,9 +150,12 @@ def judge_logout(request):
 def applicant_list(request):
     """ Displays applicants by instrument for judge evaluation """
     if request.user.is_active:
+# REFACTOR--HIT DATABASE INSTEAD OF USER NAME
+        
         # looking up all applicants whose instrument matches username
         instrument = request.user.username
         try:
+# REFACTOR--GRAB ASSOCIATION INSTEAD
             applicant_list = Applicant.objects.filter(instrument__exact=instrument).order_by('last_name')
         except (ObjectDoesNotExist):
             return HttpResponseRedirect(reverse('database_problem'))
@@ -185,9 +190,10 @@ def applicant_selection(request):
             else:
                 return HttpResponseRedirect(reverse('database_problem'))
         else:
+# REFACTOR--HIT DATABASE INSTEAD OF USER NAME
             # looking up all applicants whose instrument matches username
             instrument = request.user.username
-            
+# REFACTOR--GRAB ASSOCIATION INSTEAD
             # building formset
             ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
             set = ApplicantFormSet(queryset=Applicant.objects.filter(
@@ -269,6 +275,360 @@ def on_admin_db_info(request):
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
+
+def on_admin_locks(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            locks = AuditionControl.objects.get(reference_name='controls')
+            form = Locks(initial={'applicant_form_lock':locks.applicant_form_lock, 'judge_submission_form_lock':locks.judge_submission_form_lock})
+            return render(request, 'AuditiON/on_admin_locks.html', {'form':form })
+        if (request.method == 'POST'):
+            form = Locks(request.POST)
+            if form.is_valid():
+                locks = AuditionControl.objects.get(reference_name='controls')
+                locks.applicant_form_lock = form.cleaned_data['applicant_form_lock']
+                locks.judge_submission_form_lock = form.cleaned_data['judge_submission_form_lock']
+                locks.save()
+                return HttpResponseRedirect(reverse('on_admin_locks'))
+            else:
+                return render(request, 'AuditiON/on_admin_locks.html', {'form':form })
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_judge_home(request):
+    """ Admin home for judge data and control """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            judges = User.objects.all()
+            count = Applicant.objects.count()
+            return render(request, 'AuditiON/on_admin_judge_home.html', {'judges':judges, 'count':count})
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_create_judge(request):
+    """ Create Judges """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = CreateJudge()
+            count = Applicant.objects.count()
+            return render(request, 'AuditiON/on_admin_create_judge.html', {'form':form, 'count':count})
+        if (request.method == 'POST'):
+            form = CreateJudge(request.POST)
+            if form.is_valid():
+                # hack: 'UniqueUser'
+                # action: must catch db error and provide custom notification
+                try:
+                    new_judge = User.objects.create_user(form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
+                    new_judge.save()
+                except (Error):
+                    unique = True
+                    return render(request, 'AuditiON/on_admin_create_judge.html', {'form':form, 'unique':unique})
+                                  
+                return HttpResponseRedirect(reverse('on_admin_judge_home'))
+            else:
+                return render(request, 'AuditiON/on_admin_create_judge.html', {'form':form})
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_delete_judge(request):
+    """ Delete judges """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = DeleteJudge()
+            return render(request, 'AuditiON/on_admin_delete_judge.html', {'form':form})
+        if (request.method == 'POST'):
+            post = request.POST.getlist('judges')
+            for judge in post:
+                name_match = User.objects.filter(username__exact=judge)
+                for name in name_match:
+                    # Superusers cannot delete each other or themselves
+                    if not name.is_superuser:
+                        name.delete()
+            return HttpResponseRedirect(reverse('on_admin_judge_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_change_judge_email(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = ChangeJudgeEmail()
+            return render(request, 'AuditiON/on_admin_change_judge_email.html', {'form':form})
+        if (request.method == 'POST'):
+            form = ChangeJudgeEmail(request.POST)
+            if form.is_valid():
+                judge = User.objects.get(username=form.cleaned_data['username'])
+                # Superuser may not change another superuser's email
+                if (request.user.username != judge.username and judge.is_superuser):
+                    return HttpResponseRedirect(reverse('on_admin_judge_home'))
+                judge.email = form.cleaned_data['email']
+                judge.save()
+                return HttpResponseRedirect(reverse('on_admin_judge_home'))
+            else:
+                return render(request, 'AuditiON/on_admin_change_judge_email.html', {'form':form})
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_change_judge_password(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = ChangeJudgePassword()
+            return render(request, 'AuditiON/on_admin_change_judge_password.html', {'form':form})
+        if (request.method == 'POST'):
+            form = ChangeJudgePassword(request.POST)
+            if form.is_valid():
+                judge = User.objects.get(username=form.cleaned_data['username'])
+                # Superuser may not change another superuser's password
+                if (request.user.username != judge.username and judge.is_superuser):
+                    return HttpResponseRedirect(reverse('on_admin_judge_home'))
+                judge.password = make_password(form.cleaned_data['password'])
+                judge.save()
+                return HttpResponseRedirect(reverse('on_admin_judge_home'))
+            else:
+                return render(request, 'AuditiON/on_admin_change_judge_password.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_create_instrument(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            instruments = Instruments.objects.all()
+            form = CreateInstrument()
+            return render(request, 'AuditiON/on_admin_create_instrument.html', {'form':form, 'instruments':instruments})
+        if (request.method == 'POST'):
+            form = CreateInstrument(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_create_instrument'))
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_associate_judge(request):
+    """ Associate judge with instrument """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = AssociateJudge()
+            return render(request, 'AuditiON/on_admin_associate_judge.html', {'form':form})
+        if (request.method == 'POST'):
+            form = AssociateJudge(request.POST)
+            if form.is_valid():
+                judge = User.objects.get(username=form.cleaned_data['username'])
+                instrument = Instruments.objects.get(name=form.cleaned_data['instrument'])
+                judge.ins.add(instrument)
+                return HttpResponseRedirect(reverse('on_admin_judge_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_applicant_home(request):
+    """ Admin home for applicant data and control """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            applicants = Applicant.objects.all()
+            count = Applicant.objects.count()
+            return render(request, 'AuditiON/on_admin_applicant_home.html', {'applicants':applicants, 'count':count})
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_create_applicant(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = ApplicantForm()
+            return render(request, 'AuditiON/on_admin_create_applicant.html', {'form':form})
+        if (request.method == 'POST'):
+            form = ApplicantForm(request.POST)
+            if form.is_valid():
+                form.instance.youtube_link = functions.youtube_split(form.instance.youtube_link)
+                form.instance.code = uuid.uuid4().hex
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_applicant_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_delete_applicant(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = DeleteApplicant()
+            return render(request, 'AuditiON/on_admin_delete_applicant.html', {'form':form})
+        if (request.method == 'POST'):
+            post = request.POST.getlist('full_name')
+            for applicant in post:
+                code_match = Applicant.objects.filter(code__exact=applicant)
+                for name in code_match:
+                    name.delete()
+        return HttpResponseRedirect(reverse('on_admin_applicant_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_edit_applicant_select(request):
+    """  for use with on_admin_edit_applicant """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = SelectApplicant()
+            return render(request, 'AuditiON/on_admin_edit_applicant_select.html', {'form':form})
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_edit_applicant(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            applicant_code = request.GET.getlist('applicant')
+            applicant = Applicant.objects.get(code=applicant_code[0])
+            form = ApplicantEditForm(instance=applicant)
+            form.initial['youtube_link'] = 'www.youtu.be/%s' % (form.instance.youtube_link)
+            return render(request, 'AuditiON/on_admin_edit_applicant.html', {'form':form})
+        if (request.method == 'POST'):
+            applicant = Applicant.objects.get(code=request.POST['code'])
+            form = ApplicantEditForm(request.POST, instance=applicant)
+            if form.is_valid():
+                form.instance.youtube_link = functions.youtube_split(form.instance.youtube_link)
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_applicant_home'))
+            else:
+                return render(request, 'AuditiON/on_admin_edit_applicant.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_principals_home(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = Principal.objects.all()
+            return render(request, 'AuditiON/on_admin_principals_home.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_create_principal(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = CreatePrincipal()
+            return render(request, 'AuditiON/on_admin_create_principal.html', {'form':form})
+        if (request.method == 'POST'):
+            form = CreatePrincipal(request.POST)
+            if form.is_valid():
+                form.instance.code = uuid.uuid4().hex
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_principals_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_delete_principal(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = DeletePrincipal()
+            return render(request, 'AuditiON/on_admin_delete_principal.html', {'form':form})
+        # to be want to give the option to delete more than one principal at a time?
+        # THIS IS WHERE YOU ARE
+        if (request.method == 'POST'):
+            post = request.POST.getlist('full_name')
+            for principal in post:
+                code_match = Principal.objects.filter(code__exact=principal)
+                for name in code_match:
+                    name.delete()
+        return HttpResponseRedirect(reverse('on_admin_principals_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_edit_principal_select(request):
+    """  for use with on_admin_edit_applicant """
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = SelectPrincipal()
+            return render(request, 'AuditiON/on_admin_edit_principal_select.html', {'form':form})
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_edit_principal(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            principal_code = request.GET.getlist('principal')
+            principal = Principal.objects.get(code=principal_code[0])
+            form = PrincipalEditForm(instance=principal)
+            return render(request, 'AuditiON/on_admin_edit_principal.html', {'form':form})
+        if (request.method == 'POST'):
+            principal = Principal.objects.get(code=request.POST['code'])
+            form = PrincipalEditForm(request.POST, instance=principal)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_principals_home'))
+            else:
+                return render(request, 'AuditiON/on_admin_edit_principal.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_production_home(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = Production.objects.all()
+            return render(request, 'AuditiON/on_admin_production_home.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_create_production(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = ProductionForm()
+            return render(request, 'AuditiON/on_admin_create_production.html', {'form':form})
+        if (request.method == 'POST'):
+            form = ProductionForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_production_home'))
+            else:
+                return render(request, 'AuditiON/on_admin_create_production.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_rehearsal_home(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = Rehearsal.objects.all()
+            return render(request, 'AuditiON/on_admin_rehearsal_home.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_create_rehearsal(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = RehearsalForm()
+            return render(request, 'AuditiON/on_admin_create_rehearsal.html', {'form':form})
+        if (request.method == 'POST'):
+            form = RehearsalForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_rehearsal_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_delete_rehearsal(request):
+    pass
 
 def on_admin_data(request):
     """ Create CSV of all applicants for download """

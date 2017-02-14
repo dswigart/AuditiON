@@ -1,0 +1,35 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+<p><a href="{% url 'on_admin_create_applicant' %}">Create New Applicant</a></p>
+<p><a href="{% url 'on_admin_delete_applicant' %}">Delete Applicant</a></p><p><a href="{% url 'on_admin_edit_applicant_select' %}">Edit Applicant</a></p>
+
+<hr>
+<h2>Applicants in the Database:</h2>
+{% for field in applicants %}
+
+
+{{ field.first_name }}
+{{ field.last_name }}
+{% for x in field.ins.all %}
+{{ x.name }}
+{% endfor %}
+<br>
+{% endfor %}
+
+
+
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+
+{% endblock %}

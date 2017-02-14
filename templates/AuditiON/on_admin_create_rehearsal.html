@@ -1,0 +1,41 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+<h2>Create Production</h2>
+
+
+<form action="{% url 'on_admin_create_rehearsal' %}" method="post">
+    {% csrf_token %}
+    
+    {% for field in form %}
+    {{  field.label_tag }}
+    {{ field.errors }}
+    {{  field  }}
+    <br>
+    {% endfor %}
+    
+    <input type="submit" value="Submit" />
+</form>
+
+<hr>
+
+<h2>Rehearsals in the Database:</h2>
+{% for re in rehearsals %}
+
+{{ re.start }}
+
+<br>
+{% endfor %}
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+{% endblock %}

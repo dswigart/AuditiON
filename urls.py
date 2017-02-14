@@ -35,4 +35,35 @@ urlpatterns = [
     url(r'^on_admin_db_info$', views.on_admin_db_info, name='on_admin_db_info'),
     url(r'^on_admin_data$', views.on_admin_data, name='on_admin_data'),
     url(r'^on_admin_accepted_confirmed$', views.on_admin_accepted_confirmed, name='on_admin_accepted_confirmed'),
+               
+    # Judges
+    url(r'^on_admin_judge_home$', views.on_admin_judge_home, name='on_admin_judge_home'),
+    url(r'^on_admin_create_judge$', views.on_admin_create_judge, name='on_admin_create_judge'),
+    url(r'^on_admin_delete_judge$', views.on_admin_delete_judge, name='on_admin_delete_judge'),
+    url(r'^on_admin_change_judge_email$', views.on_admin_change_judge_email, name='on_admin_change_judge_email'),
+    url(r'^on_admin_change_judge_password$', views.on_admin_change_judge_password, name='on_admin_change_judge_password'),
+    url(r'^on_admin_associate_judge$', views.on_admin_associate_judge, name='on_admin_associate_judge'),
+    url(r'^on_admin_create_instrument$', views.on_admin_create_instrument, name='on_admin_create_instrument'),
+               
+    # Locks
+    url(r'^on_admin_locks$', views.on_admin_locks, name='on_admin_locks'),
+               
+    # Applicants
+    url(r'^on_admin_applicant_home$', views.on_admin_applicant_home, name='on_admin_applicant_home'),
+    url(r'^on_admin_create_applicant$', views.on_admin_create_applicant, name='on_admin_create_applicant'),
+    url(r'^on_admin_delete_applicant$', views.on_admin_delete_applicant, name='on_admin_delete_applicant'),
+    url(r'^on_admin_edit_applicant_select$', views.on_admin_edit_applicant_select, name='on_admin_edit_applicant_select'),
+    url(r'^on_admin_edit_applicant$', views.on_admin_edit_applicant, name='on_admin_edit_applicant'),
+               
+    # Principal
+    url(r'^on_admin_principals_home$', views.on_admin_principals_home, name='on_admin_principals_home'),
+    url(r'^on_admin_create_principal$', views.on_admin_create_principal, name='on_admin_create_principal'),
+    url(r'^on_admin_delete_principal$', views.on_admin_delete_principal, name='on_admin_delete_principal'),
+    url(r'^on_admin_edit_principal_select$', views.on_admin_edit_principal_select, name='on_admin_edit_principal_select'),
+    url(r'^on_admin_edit_principal$', views.on_admin_edit_principal, name='on_admin_edit_principal'),
+    # Productions
+    url(r'^on_admin_production_home$', views.on_admin_production_home, name='on_admin_production_home'),
+    url(r'^on_admin_create_production$', views.on_admin_create_production, name='on_admin_create_production'),
+    url(r'^on_admin_rehearsal_home$', views.on_admin_rehearsal_home, name='on_admin_rehearsal_home'),
+    url(r'^on_admin_create_rehearsal$', views.on_admin_create_rehearsal, name='on_admin_create_rehearsal'),
 ]
