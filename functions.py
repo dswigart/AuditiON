@@ -47,7 +47,6 @@ def get_instrument_list():
     for inst in instrument:
         instrument_tuple = (inst, inst)
         instrument_list.append(instrument_tuple)
-
     return instrument_list
 
 
@@ -59,7 +58,6 @@ def get_judge_ins_list(judge):
     for inst in instrument:
         instrument_tuple = (inst.name, inst.name)
         instrument_list.append(instrument_tuple)
-    
     return instrument_list
 
 
@@ -69,7 +67,6 @@ def get_judge_list():
     for judge in judges:
         judge_tuple = (judge, judge)
         judge_list.append(judge_tuple)
-
     return judge_list
 
 
@@ -81,7 +78,6 @@ def get_applicant_list():
         display = '%s %s, %s' % (applicant.first_name, applicant.last_name, applicant.instrument)
         applicant_tuple = (applicant.code, display)
         applicant_list.append(applicant_tuple)
-
     return applicant_list
 
 
@@ -93,7 +89,6 @@ def get_principal_list():
         display = '%s %s, %s' % (principal.first_name, principal.last_name, principal.instrument)
         principal_tuple = (principal.code, display)
         principal_list.append(principal_tuple)
-
     return principal_list
 
 
