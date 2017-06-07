@@ -43,7 +43,11 @@ urlpatterns = [
     url(r'^on_admin_change_judge_email$', views.on_admin_change_judge_email, name='on_admin_change_judge_email'),
     url(r'^on_admin_change_judge_password$', views.on_admin_change_judge_password, name='on_admin_change_judge_password'),
     url(r'^on_admin_associate_judge$', views.on_admin_associate_judge, name='on_admin_associate_judge'),
+               
+    # Instruments
+    url(r'^on_admin_instrument_home$', views.on_admin_instrument_home, name='on_admin_instrument_home'),
     url(r'^on_admin_create_instrument$', views.on_admin_create_instrument, name='on_admin_create_instrument'),
+    url(r'^on_admin_delete_instrument$', views.on_admin_delete_instrument, name='on_admin_delete_instrument'),
                
     # Locks
     url(r'^on_admin_locks$', views.on_admin_locks, name='on_admin_locks'),
@@ -62,8 +66,14 @@ urlpatterns = [
     url(r'^on_admin_edit_principal_select$', views.on_admin_edit_principal_select, name='on_admin_edit_principal_select'),
     url(r'^on_admin_edit_principal$', views.on_admin_edit_principal, name='on_admin_edit_principal'),
     # Productions
+    url(r'^on_admin_production_data_home$', views.on_admin_production_data_home, name='on_admin_production_data_home'),
     url(r'^on_admin_production_home$', views.on_admin_production_home, name='on_admin_production_home'),
     url(r'^on_admin_create_production$', views.on_admin_create_production, name='on_admin_create_production'),
+    url(r'^on_admin_delete_production$', views.on_admin_delete_production, name='on_admin_delete_production'),
     url(r'^on_admin_rehearsal_home$', views.on_admin_rehearsal_home, name='on_admin_rehearsal_home'),
     url(r'^on_admin_create_rehearsal$', views.on_admin_create_rehearsal, name='on_admin_create_rehearsal'),
+    url(r'^on_admin_delete_rehearsal$', views.on_admin_delete_rehearsal, name='on_admin_delete_rehearsal'),
+    url(r'^on_admin_show_home$', views.on_admin_show_home, name='on_admin_show_home'),
+    url(r'^on_admin_create_show$', views.on_admin_create_show, name='on_admin_create_show'),
+    url(r'^on_admin_delete_show$', views.on_admin_delete_show, name='on_admin_delete_show'),
 ]

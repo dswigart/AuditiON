@@ -5,14 +5,26 @@
 <p>You are logged in as "{{ request.user.username }}"</p>
 <p>Note that you will not be able to submit choices until
 the audition is closed.</p>
-<p>{{ request.user.username }} submissions total: {{ applicant_count }}</p>
-
+<p>{{ instrument.name }} submissions total: {{ applicant_count }}</p>
 <p>
 <a href="{% url 'judge_logout' %}">Logout</a><br>
 <a href="{% url 'applicant_selection' %}">Submit Choices</a><br>
 </p>
 
 <hr>
+Select instrument to judge:
+<form action="{% url 'applicant_list' %}" method="post">
+    
+    {% csrf_token %}
+    {% for field in instrument_list %}
+    {{ field }}
+    
+    {% endfor %}
+    <input type="submit" value="Submit" />
+</form>
+
+Displaying all {{ instrument.name }} applicants:
+
 {% endblock %}
 
 {% block Content %}

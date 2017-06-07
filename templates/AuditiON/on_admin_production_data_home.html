@@ -1,0 +1,45 @@
+{% extends "on_admin_base.html" %}
+
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+<h2>Edit Production Data</h2>
+
+
+<form action="{% url 'on_admin_production_data_home' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        {% if "name" in field.id_for_label %}
+            {{ field.as_hidden }}
+        {% elif "data" in field.id_for_label %}
+            {{ field }}
+    
+        {% endif %}
+        <br>
+    {% endfor %}
+    
+    <script> CKEDITOR.replace('data'); CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;</script>
+    <input type="submit" value="Submit" />
+</form>
+
+<hr>
+
+<h2>Production Data in the Database:</h2>
+{% autoescape off %}
+{{ production_data.data }}
+{% endautoescape %}
+<br>
+
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+{% endblock %}
+

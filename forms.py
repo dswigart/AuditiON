@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from AuditiON.models import Instruments
 from AuditiON.constants import AVAILABILITY_LIST, STATUS_CHOICES, CONFIRMATION_CHOICES, ADD_IGNORE, LOCK
-from AuditiON.functions import get_judge_list, get_instrument_list, get_applicant_list, get_principal_list
+from AuditiON.functions import get_judge_list, get_instrument_list, get_applicant_list, get_principal_list, get_rehearsal_list, get_show_list, get_production_list, get_judge_ins_list
 
 
 class Locks(forms.Form):
@@ -102,5 +102,50 @@ class SelectPrincipal(forms.Form):
         self.fields['principal'].choices = get_principal_list()
     
     principal = forms.ChoiceField(label='Principal', choices=get_principal_list())
+
+
+class DeleteInstrument(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        super(DeleteInstrument, self).__init__(*args, **kwargs)
+        self.fields['name'].choices = get_instrument_list()
+    
+    name = forms.ChoiceField(label='Instrument', choices=get_instrument_list())
+
+
+class DeleteProduction(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        super(DeleteProduction, self).__init__(*args, **kwargs)
+        self.fields['name'].choices = get_production_list()
+    
+    name = forms.ChoiceField(label='Production', choices=get_production_list())
+
+
+class DeleteRehearsal(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        super(DeleteRehearsal, self).__init__(*args, **kwargs)
+        self.fields['start'].choices = get_rehearsal_list()
+    
+    start = forms.ChoiceField(label='Rehearsal', choices=get_rehearsal_list())
+
+
+class DeleteShow(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        super(DeleteShow, self).__init__(*args, **kwargs)
+        self.fields['start'].choices = get_show_list()
+    
+    start = forms.ChoiceField(label='Show', choices=get_show_list())
+
+
+class ToggleInstrument(forms.Form):
+    def __init__(self, *args, **kwargs):
+        judge = kwargs.pop('judge')
+        super(ToggleInstrument, self).__init__(*args, **kwargs)
+        self.fields['instrument_list'].choices = get_judge_ins_list(judge)
+    
+    instrument_list = forms.ChoiceField(label='Instrument_List')
 
 

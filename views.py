@@ -1,6 +1,8 @@
 import uuid
 import csv
 
+from datetime import datetime
+
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import AuthenticationForm
@@ -13,8 +15,8 @@ from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 
-from AuditiON.models import Applicant, ApplicantForm, CreateInstrument, AuditionControl, Instruments, Production, ApplicantEditForm, Principal, CreatePrincipal, PrincipalEditForm, ProductionForm, Rehearsal, RehearsalForm
-from AuditiON.forms import ApplicantInfo, CreateJudge, DeleteJudge, ChangeJudgeEmail, ChangeJudgePassword, AssociateJudge, Locks, DeleteApplicant, SelectApplicant, DeletePrincipal, SelectPrincipal
+from AuditiON.models import Applicant, ApplicantForm, CreateInstrument, AuditionControl, Instruments, Production, ApplicantEditForm, Principal, CreatePrincipal, PrincipalEditForm, ProductionForm, Rehearsal, RehearsalForm, Show, ShowForm, ProductionData, ProductionDataForm
+from AuditiON.forms import ApplicantInfo, CreateJudge, DeleteJudge, DeleteInstrument, ChangeJudgeEmail, ChangeJudgePassword, AssociateJudge, Locks, DeleteApplicant, SelectApplicant, DeletePrincipal, SelectPrincipal, DeleteProduction, DeleteRehearsal, DeleteShow, ToggleInstrument
 import AuditiON.functions as functions
 
 
@@ -46,8 +48,9 @@ def audition_form(request):
     # first time through, render empty form if audition is open
     else:
         form = ApplicantForm()
+        production_data = ProductionData.objects.get(name='production_data')
 
-    return render(request, 'AuditiON/form.html', {'form':form})
+    return render(request, 'AuditiON/form.html', {'form':form,'production_data':production_data})
 
 
 def audition_form_confirmation(request):
@@ -150,17 +153,21 @@ def judge_logout(request):
 def applicant_list(request):
     """ Displays applicants by instrument for judge evaluation """
     if request.user.is_active:
-# REFACTOR--HIT DATABASE INSTEAD OF USER NAME
         
-        # looking up all applicants whose instrument matches username
-        instrument = request.user.username
-        try:
-# REFACTOR--GRAB ASSOCIATION INSTEAD
-            applicant_list = Applicant.objects.filter(instrument__exact=instrument).order_by('last_name')
-        except (ObjectDoesNotExist):
-            return HttpResponseRedirect(reverse('database_problem'))
-        applicant_count = applicant_list.count()
-        return render(request, 'AuditiON/applicant_list.html', {'applicant_list':applicant_list, 'applicant_count':applicant_count})
+        if (request.method == 'GET'):
+            instrument_list = ToggleInstrument(judge=request.user)
+            return render(request, 'AuditiON/applicant_list.html', {'instrument_list':instrument_list})
+                
+        if (request.method == 'POST'):
+            instrument = request.POST.get('instrument_list')
+            instrument = Instruments.objects.get(name=instrument)
+            instrument_list = ToggleInstrument(judge=request.user)
+            try:
+                applicant_list = Applicant.objects.filter(instrument__exact=instrument)      #.order_by('last_name')
+            except (ObjectDoesNotExist):
+                return HttpResponseRedirect(reverse('database_problem'))
+            applicant_count = applicant_list.count()
+            return render(request, 'AuditiON/applicant_list.html', {'instrument_list':instrument_list,'instrument':instrument,'applicant_list':applicant_list, 'applicant_count':applicant_count})
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
@@ -398,6 +405,15 @@ def on_admin_change_judge_password(request):
         return HttpResponseRedirect(reverse('access_denied'))
 
 
+def on_admin_instrument_home(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = Instruments.objects.all()
+            return render(request, 'AuditiON/on_admin_instrument_home.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
 def on_admin_create_instrument(request):
     if (request.user.is_superuser):
         if (request.method == 'GET'):
@@ -408,7 +424,23 @@ def on_admin_create_instrument(request):
             form = CreateInstrument(request.POST)
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect(reverse('on_admin_create_instrument'))
+                return HttpResponseRedirect(reverse('on_admin_instrument_home'))
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_delete_instrument(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            instruments = Instruments.objects.all()
+            form = DeleteInstrument()
+            return render(request, 'AuditiON/on_admin_delete_instrument.html', {'form':form, 'instruments':instruments})
+        if (request.method == 'POST'):
+            inst_name = request.POST.getlist('name')
+            instrument = Instruments.objects.get(name=inst_name[0])
+            instrument.delete()
+            return HttpResponseRedirect(reverse('on_admin_instrument_home'))
 
     else:
         return HttpResponseRedirect(reverse('access_denied'))
@@ -604,6 +636,20 @@ def on_admin_create_production(request):
         return HttpResponseRedirect(reverse('access_denied'))
 
 
+def on_admin_delete_production(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = DeleteProduction()
+            return render(request, 'AuditiON/on_admin_delete_production.html', {'form':form})
+        if (request.method == 'POST'):
+            pro_name = request.POST.getlist('name')
+            production = Production.objects.get(name=pro_name[0])
+            production.delete()
+            return HttpResponseRedirect(reverse('on_admin_production_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
 def on_admin_rehearsal_home(request):
     if (request.user.is_superuser):
         if (request.method == 'GET'):
@@ -628,7 +674,83 @@ def on_admin_create_rehearsal(request):
 
 
 def on_admin_delete_rehearsal(request):
-    pass
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            rehearsal = Rehearsal.objects.all()
+            form = DeleteRehearsal()
+            return render(request, 'AuditiON/on_admin_delete_rehearsal.html', {'form':form})
+        if (request.method == 'POST'):
+            form = DeleteRehearsal(request.POST)
+            reh_str = request.POST.getlist('start')
+            reh_dt = datetime.strptime(reh_str[0], '%c')
+            rehearsal = Rehearsal.objects.get(start=reh_dt)
+            rehearsal.delete()
+            return HttpResponseRedirect(reverse('on_admin_rehearsal_home'))
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_show_home(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = Show.objects.all()
+            return render(request, 'AuditiON/on_admin_show_home.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_create_show(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            form = ShowForm()
+            return render(request, 'AuditiON/on_admin_create_show.html', {'form':form})
+        if (request.method == 'POST'):
+            form = ShowForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_show_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_delete_show(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            show = Show.objects.all()
+            form = DeleteShow()
+            return render(request, 'AuditiON/on_admin_delete_show.html', {'form':form})
+        if (request.method == 'POST'):
+            form = DeleteShow(request.POST)
+            sho_str = request.POST.getlist('start')
+            sho_dt = datetime.strptime(sho_str[0], '%c')
+            show = Show.objects.get(start=sho_dt)
+            show.delete()
+            return HttpResponseRedirect(reverse('on_admin_show_home'))
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+
+def on_admin_production_data_home(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            production_data = ProductionData.objects.get(name='production_data')
+            form = ProductionDataForm(instance=production_data)
+            return render(request, 'AuditiON/on_admin_production_data_home.html', {'form':form, 'production_data':production_data})
+        if (request.method == 'POST'):
+            form = ProductionDataForm(request.POST)
+            cursor = connection.cursor()
+            cursor.execute('UPDATE "AuditiON_productiondata" SET data = %s WHERE name = %s', [form['data'].data, form['name'].data])
+            return HttpResponseRedirect(reverse('on_admin_production_data_home'))
+        else:
+            return render(request, 'AuditiON/on_admin_production_data_home.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+
 
 def on_admin_data(request):
     """ Create CSV of all applicants for download """

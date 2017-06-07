@@ -5,6 +5,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static "AuditiON/on_admin_style.css" %}" />
     <title>{% block title %}AuditiON{% endblock %}</title>
+   <script src="/static/Audition/ckeditor/ckeditor.js"></script>
 </head>
 
 <body>
@@ -39,13 +40,14 @@
                 
                 <p><a href="{% url 'on_admin_applicant_home' %}">Applicants</p>
                 <p><a href="{% url 'on_admin_principals_home' %}">Principals</p>
-                <p><a href="{% url 'on_admin_create_instrument' %}">Instruments</p>
+                <p><a href="{% url 'on_admin_instrument_home' %}">Instruments</p>
                     
                 <br>
                     
                 <p><a href="{% url 'on_admin_production_home'%}">Productions</p>
                 <p><a href="{% url 'on_admin_rehearsal_home' %}">Rehearsals</p>
-                <p><a href="{% url 'on_admin_judge_home' %}">Shows</p>
+                <p><a href="{% url 'on_admin_show_home' %}">Shows</p>
+                    <p><a href="{% url 'on_admin_production_data_home' %}">ProductionData</p>
 
             </div>
         </div>

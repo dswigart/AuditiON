@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 from AuditiON.constants import AVAILABILITY_LIST, CONFIRMATION_CHOICES, STATUS_CHOICES, RANKING_CHOICES, LOCK
 
-
 # hack 'UniqueUsername': neccesary in order to keep superusers and users from having the same name.
 # fixes: the system may load one when the other was intended--now it cannot.
 User._meta.get_field('username')._unique = True
@@ -22,7 +21,7 @@ class Legacy(models.Model):
 
 class Instruments(models.Model):
     """ Instruments """
-    name = models.CharField('Instrument Name', max_length=30, primary_key=True)
+    name = models.CharField('Instrument Name', max_length=30)
     judge = models.ForeignKey(User, related_name='ins', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -102,12 +101,9 @@ class ApplicantEditForm(ModelForm):
 class Production(models.Model):
     """ Production """
     name = models.CharField('Production Name', max_length=30)
-    orchestra_students = models.ManyToManyField(Applicant)
-    orchestra_principals = models.ManyToManyField(Principal)
-
+    
     def __str__(self):
         return self.name
-
 
 class ProductionForm(ModelForm):
     class Meta:
@@ -118,8 +114,8 @@ class ProductionForm(ModelForm):
 class Rehearsal(models.Model):
     """ Rehearsal """
     production = models.ForeignKey(Production)
-    start = models.DateTimeField()
-    finish = models.DateTimeField()
+    start = models.DateTimeField(unique=True)
+    finish = models.DateTimeField(unique=True)
 
     def __str__(self):
         return self.start
@@ -133,12 +129,28 @@ class RehearsalForm(ModelForm):
 class Show(models.Model):
     """ Show """
     production = models.ForeignKey(Production)
-    start = models.DateTimeField()
-    finish = models.DateTimeField()
+    start = models.DateTimeField(unique=True)
+    finish = models.DateTimeField(unique=True)
 
 
     def __str__(self):
         return self.start
+
+class ShowForm(ModelForm):
+    class Meta:
+        model = Show
+        fields = '__all__'
+
+
+class ProductionData(models.Model):
+    # note: name should be set to 'production_data'
+    name = models.CharField(max_length=18, primary_key=True)
+    data = models.TextField('Production Data')
+
+class ProductionDataForm(ModelForm):
+    class Meta:
+        model = ProductionData
+        fields = '__all__'
 
 
 class AuditionControl(models.Model):

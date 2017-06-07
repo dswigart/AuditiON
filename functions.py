@@ -2,7 +2,7 @@ import re
 
 from django.contrib.auth.models import User
 
-from AuditiON.models import Applicant, Instruments, Principal
+from AuditiON.models import Applicant, Instruments, Principal, Production, Rehearsal, Show
 
 
 def youtube_split(link):
@@ -44,11 +44,23 @@ def get_instrument_list():
     """ Returns a list of tuples for choices in Applicant Instruments"""
 
     instrument_list = []
-    instruments = Instruments.objects.all()
-    for ins in instruments:
-        instrument_tuple = (ins, ins)
+    instrument = Instruments.objects.all()
+    for inst in instrument:
+        instrument_tuple = (inst, inst)
         instrument_list.append(instrument_tuple)
 
+    return instrument_list
+
+
+def get_judge_ins_list(judge):
+    """ Returns a list of tuples for choices in Applicant Instruments"""
+    
+    instrument_list = []
+    instrument = judge.ins.all()
+    for inst in instrument:
+        instrument_tuple = (inst.name, inst.name)
+        instrument_list.append(instrument_tuple)
+    
     return instrument_list
 
 
@@ -84,6 +96,43 @@ def get_principal_list():
         principal_list.append(principal_tuple)
 
     return principal_list
+
+
+def get_production_list():
+    """ Returns a list of tuples for choices in Applicant Instruments"""
+    
+    production_list = []
+    production = Production.objects.all()
+    for pro in production:
+        production_tuple = (pro.name, pro.name)
+        production_list.append(production_tuple)
+    
+    return production_list
+
+
+def get_rehearsal_list():
+    """ Returns a list of tuples for choices in Applicant Instruments"""
+    
+    rehearsal_list = []
+    rehearsal = Rehearsal.objects.all()
+    for reh in rehearsal:
+        rehearsal_tuple = (reh.start.ctime(), reh.start.ctime())
+        rehearsal_list.append(rehearsal_tuple)
+    
+    return rehearsal_list
+
+
+def get_show_list():
+    """ Returns a list of tuples for choices in Applicant Instruments"""
+    
+    show_list = []
+    show = Show.objects.all()
+    for sho in show:
+        show_tuple = (sho.start.ctime(), sho.start.ctime())
+        show_list.append(show_tuple)
+    
+    return show_list
+
 
 
 
