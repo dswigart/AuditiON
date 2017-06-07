@@ -67,13 +67,4 @@ urlpatterns = [
     url(r'^on_admin_edit_principal$', views.on_admin_edit_principal, name='on_admin_edit_principal'),
     # Productions
     url(r'^on_admin_production_data_home$', views.on_admin_production_data_home, name='on_admin_production_data_home'),
-    url(r'^on_admin_production_home$', views.on_admin_production_home, name='on_admin_production_home'),
-    url(r'^on_admin_create_production$', views.on_admin_create_production, name='on_admin_create_production'),
-    url(r'^on_admin_delete_production$', views.on_admin_delete_production, name='on_admin_delete_production'),
-    url(r'^on_admin_rehearsal_home$', views.on_admin_rehearsal_home, name='on_admin_rehearsal_home'),
-    url(r'^on_admin_create_rehearsal$', views.on_admin_create_rehearsal, name='on_admin_create_rehearsal'),
-    url(r'^on_admin_delete_rehearsal$', views.on_admin_delete_rehearsal, name='on_admin_delete_rehearsal'),
-    url(r'^on_admin_show_home$', views.on_admin_show_home, name='on_admin_show_home'),
-    url(r'^on_admin_create_show$', views.on_admin_create_show, name='on_admin_create_show'),
-    url(r'^on_admin_delete_show$', views.on_admin_delete_show, name='on_admin_delete_show'),
 ]

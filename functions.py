@@ -2,8 +2,7 @@ import re
 
 from django.contrib.auth.models import User
 
-from AuditiON.models import Applicant, Instruments, Principal, Production, Rehearsal, Show
-
+from AuditiON.models import Applicant, Instruments, Principal
 
 def youtube_split(link):
     """ Formats youtube string to embed in site """
@@ -96,43 +95,6 @@ def get_principal_list():
         principal_list.append(principal_tuple)
 
     return principal_list
-
-
-def get_production_list():
-    """ Returns a list of tuples for choices in Applicant Instruments"""
-    
-    production_list = []
-    production = Production.objects.all()
-    for pro in production:
-        production_tuple = (pro.name, pro.name)
-        production_list.append(production_tuple)
-    
-    return production_list
-
-
-def get_rehearsal_list():
-    """ Returns a list of tuples for choices in Applicant Instruments"""
-    
-    rehearsal_list = []
-    rehearsal = Rehearsal.objects.all()
-    for reh in rehearsal:
-        rehearsal_tuple = (reh.start.ctime(), reh.start.ctime())
-        rehearsal_list.append(rehearsal_tuple)
-    
-    return rehearsal_list
-
-
-def get_show_list():
-    """ Returns a list of tuples for choices in Applicant Instruments"""
-    
-    show_list = []
-    show = Show.objects.all()
-    for sho in show:
-        show_tuple = (sho.start.ctime(), sho.start.ctime())
-        show_list.append(show_tuple)
-    
-    return show_list
-
 
 
 

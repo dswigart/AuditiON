@@ -9,7 +9,7 @@
 
 <h2>Edit Production Data</h2>
 
-
+<p>Whatever you write here will appear on the audition_form page for applicants to see.</p>
 <form action="{% url 'on_admin_production_data_home' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
@@ -19,7 +19,7 @@
             {{ field }}
     
         {% endif %}
-        <br>
+   
     {% endfor %}
     
     <script> CKEDITOR.replace('data'); CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;</script>

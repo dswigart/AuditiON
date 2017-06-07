@@ -98,50 +98,6 @@ class ApplicantEditForm(ModelForm):
         fields = '__all__'
 
 
-class Production(models.Model):
-    """ Production """
-    name = models.CharField('Production Name', max_length=30)
-    
-    def __str__(self):
-        return self.name
-
-class ProductionForm(ModelForm):
-    class Meta:
-        model = Production
-        fields = ['name']
-
-
-class Rehearsal(models.Model):
-    """ Rehearsal """
-    production = models.ForeignKey(Production)
-    start = models.DateTimeField(unique=True)
-    finish = models.DateTimeField(unique=True)
-
-    def __str__(self):
-        return self.start
-
-class RehearsalForm(ModelForm):
-    class Meta:
-        model = Rehearsal
-        fields = '__all__'
-
-
-class Show(models.Model):
-    """ Show """
-    production = models.ForeignKey(Production)
-    start = models.DateTimeField(unique=True)
-    finish = models.DateTimeField(unique=True)
-
-
-    def __str__(self):
-        return self.start
-
-class ShowForm(ModelForm):
-    class Meta:
-        model = Show
-        fields = '__all__'
-
-
 class ProductionData(models.Model):
     # note: name should be set to 'production_data'
     name = models.CharField(max_length=18, primary_key=True)
