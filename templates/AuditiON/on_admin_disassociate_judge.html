@@ -1,0 +1,58 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+{% if judge_form %}
+<h2>Disassociate Judge</h2>
+
+<form action="{% url 'on_admin_disassociate_judge' %}" method="get">
+    {% csrf_token %}
+    
+    {% for field in judge_form %}
+    
+    {{field}}
+    <br>
+    {% endfor %}
+    
+    <input type="submit" value="Submit" />
+</form>
+{% endif %}
+
+{% if instrument_form %}
+<h2>Select instrument to disassociate</h2>
+
+<form action="{% url 'on_admin_disassociate_judge' %}" method="post">
+
+    {% csrf_token %}
+    
+    {% for field in instrument_form %}
+    
+    {{field}}
+    <br>
+    {% endfor %}
+    
+    {% for field in judge_form2 %}
+    
+    {{field.as_hidden}}
+    <br>
+    {% endfor %}
+    
+    <input type="submit" value="Submit" />
+</form>
+{% endif %}
+
+
+<hr>
+
+{% endblock %}
+
+{% block Content %}
+
+
+
+{% endblock %}
+

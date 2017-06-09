@@ -463,6 +463,31 @@ def on_admin_associate_judge(request):
         return HttpResponseRedirect(reverse('access_denied'))
 
 
+def on_admin_disassociate_judge(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET' and not request.GET.getlist('judges')):
+            judge_form = DeleteJudge()
+            return render(request, 'AuditiON/on_admin_disassociate_judge.html', {'judge_form':judge_form})
+        if (request.method == 'GET' and request.GET.getlist('judges')):
+            judge = request.GET.getlist('judges')
+            judge_form2 = DeleteJudge(request.GET)
+            judge = User.objects.get(username=judge[0])
+            instrument_form = ToggleInstrument(judge=judge)
+            return render(request, 'AuditiON/on_admin_disassociate_judge.html', {'instrument_form':instrument_form, 'judge_form2':judge_form2})
+        if (request.method == 'POST'):
+            judge = request.POST.getlist('judges')
+            print judge
+            print request.POST
+            judge = User.objects.get(username=judge[0])
+            instrument = request.POST.getlist('instrument_list')
+            instrument = Instruments.objects.get(name=instrument[0])
+            judge.ins.remove(instrument)
+            return HttpResponseRedirect(reverse('on_admin_judge_home'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+
 def on_admin_applicant_home(request):
     """ Admin home for applicant data and control """
     if (request.user.is_superuser):
@@ -518,6 +543,8 @@ def on_admin_edit_applicant_select(request):
         return HttpResponseRedirect(reverse('access_denied'))
 
 
+# On_admin_edit_applicant_select routes here
+# could be done in one page as in on_admin_disassociate_judge
 def on_admin_edit_applicant(request):
     if (request.user.is_superuser):
         if (request.method == 'GET'):

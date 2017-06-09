@@ -38,7 +38,7 @@ class DeleteJudge(forms.Form):
         super(DeleteJudge, self).__init__(*args, **kwargs)
         self.fields['judges'].choices = get_judge_list()
 
-    judges = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=get_judge_list())
+    judges = forms.ChoiceField(label='Judges', choices=get_judge_list())
 
 
 class ChangeJudgeEmail(forms.Form):

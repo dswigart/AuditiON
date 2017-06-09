@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'^on_admin_change_judge_email$', views.on_admin_change_judge_email, name='on_admin_change_judge_email'),
     url(r'^on_admin_change_judge_password$', views.on_admin_change_judge_password, name='on_admin_change_judge_password'),
     url(r'^on_admin_associate_judge$', views.on_admin_associate_judge, name='on_admin_associate_judge'),
+    url(r'^on_admin_disassociate_judge$', views.on_admin_disassociate_judge, name='on_admin_disassociate_judge'),
                
     # Instruments
     url(r'^on_admin_instrument_home$', views.on_admin_instrument_home, name='on_admin_instrument_home'),
