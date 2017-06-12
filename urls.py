@@ -53,6 +53,9 @@ urlpatterns = [
     # Locks
     url(r'^on_admin_locks$', views.on_admin_locks, name='on_admin_locks'),
                
+    # Email
+    url(r'^on_admin_email_home$', views.on_admin_email_home, name='on_admin_email_home'),
+    url(r'^on_admin_email_accepted$', views.on_admin_email_accepted, name='on_admin_email_accepted'),
     # Applicants
     url(r'^on_admin_applicant_home$', views.on_admin_applicant_home, name='on_admin_applicant_home'),
     url(r'^on_admin_create_applicant$', views.on_admin_create_applicant, name='on_admin_create_applicant'),

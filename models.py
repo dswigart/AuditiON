@@ -39,7 +39,7 @@ class Principal(models.Model):
     first_name = models.CharField('First Name', max_length=30)
     last_name = models.CharField('Last Name', max_length=30)
     email_address = models.EmailField('Email Address')
-    instrument = models.ForeignKey(Instruments, related_name='prin')
+    instrument = models.ForeignKey(Instruments, related_name='prin', on_delete=models.SET_NULL, null=True, blank=True)
     code = models.CharField(max_length=40, blank=True)
 
     def __str__(self):
@@ -68,7 +68,7 @@ class Applicant(models.Model):
     zip_code = models.CharField('Zip Code', max_length=5)
     age = models.CharField('Age', max_length=3)
     school = models.CharField('School', max_length=40)
-    instrument = models.ForeignKey(Instruments)
+    instrument = models.ForeignKey(Instruments, on_delete=models.SET_NULL, null=True, blank=True)
     availability = models.CharField('Availability', max_length=6,
                                     choices=AVAILABILITY_LIST)
     avail_explain = models.TextField('Availability Explaination', default='All', help_text='If \'some\' was marked above, please note rehearsals or shows you cannot attend and provide a brief explaination.')
@@ -131,4 +131,7 @@ class StockEmailData(models.Model):
     def __str__(self):
         return self.email_name
 
-
+class StockEmailDataForm(ModelForm):
+    class Meta:
+        model = StockEmailData
+        fields = '__all__'

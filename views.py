@@ -15,7 +15,7 @@ from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 
-from AuditiON.models import Applicant, ApplicantForm, CreateInstrument, AuditionControl, Instruments, ApplicantEditForm, Principal, CreatePrincipal, PrincipalEditForm, ProductionData, ProductionDataForm
+from AuditiON.models import Applicant, ApplicantForm, CreateInstrument, AuditionControl, Instruments, ApplicantEditForm, Principal, CreatePrincipal, PrincipalEditForm, ProductionData, ProductionDataForm, StockEmailData, StockEmailDataForm
 from AuditiON.forms import ApplicantInfo, CreateJudge, DeleteJudge, DeleteInstrument, ChangeJudgeEmail, ChangeJudgePassword, AssociateJudge, Locks, DeleteApplicant, SelectApplicant, DeletePrincipal, SelectPrincipal, ToggleInstrument
 import AuditiON.functions as functions
 
@@ -654,6 +654,30 @@ def on_admin_production_data_home(request):
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
+
+def on_admin_email_home(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            return render(request, 'AuditiON/on_admin_email_home.html')
+    
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_email_accepted(request):
+    if (request.user.is_superuser):
+        if (request.method == 'GET'):
+            accepted_confirmation = StockEmailData.objects.get(email_name='accepted_confirmation')
+            form = StockEmailDataForm(instance=accepted_confirmation)
+            return render(request, 'AuditiON/on_admin_email_accepted.html', {'form':form})
+        if (request.method == 'POST'):
+            applicant_confirmation = StockEmailData.objects.get(email_name=request.POST['email_name'])
+            form = StockEmailDataForm(request.POST, instance=applicant_confirmation)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('on_admin_email_accepted'))
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
 
 
 

@@ -1,0 +1,39 @@
+{% extends "on_admin_base.html" %}
+
+
+{% block Instructions %}
+<p>You're logged in as {{ request.user.username }}</p>
+<p>{{ count }} applicants in the database.</p>
+
+<hr>
+
+{% endblock %}
+
+{% block Content %}
+
+<h2>Edit Accepted Confirmation Email</h2>
+
+<form action="{% url 'on_admin_email_accepted' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    {% if "name" in field.id_for_label %}
+    {{ field.as_hidden }}
+    {% else %}
+    <br>
+    {{ field.label_tag }}<br>
+    {{ field }}
+    {% endif %}
+    {% endfor %}
+    
+    <script> CKEDITOR.replace('content_body'); CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;</script>
+    <input type="submit" value="Submit" />
+</form>
+
+<hr>
+
+<h2>Production Data in the Database:</h2>
+{% autoescape off %}
+{{ production_data.data }}
+{% endautoescape %}
+<br>
+{% endblock %}
