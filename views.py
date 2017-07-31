@@ -44,7 +44,9 @@ def audition_form(request):
             x = functions.youtube_split(form.cleaned_data['youtube_link'])
             return render(request, 'AuditiON/form_confirmation.html',
                          {'form':form, 'youtube_string': x})
-
+        else:
+            production_data = ProductionData.objects.get(name='production_data')
+            return render(request, 'AuditiON/form.html', {'form':form,'production_data':production_data})
     # first time through, render empty form if audition is open
     else:
         form = ApplicantForm()
@@ -175,7 +177,7 @@ def applicant_list(request):
 # applicant_list redirects here when judge clicks on 'submit choices'
 # link on applicant_list page
 def applicant_selection(request):
-    """ Displays applicants by instrument for selection (edit 'status' in db) """
+    """ Displays applicants by instrument for selection (edit 'status' and 'ranking' in db) """
     # set-up to check if judge submission is open or closed
     try:
         controls = AuditionControl.objects.get(reference_name='controls')
@@ -187,17 +189,21 @@ def applicant_selection(request):
     if (lock == 'Locked'):
         return HttpResponseRedirect(reverse('access_denied'))
 
-    if request.user.is_active:
+    if (request.user.is_active):
         if (request.method == 'GET'):
-            
-            instrument = request.user.username
-            
-            # building formset
-            ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
-            set = ApplicantFormSet(queryset=Applicant.objects.filter(instrument__exact=instrument).order_by('last_name'))
-            return render(request, 'AuditiON/applicant_selection.html', {'set':set})
+            if (request.GET.get('instrument_list')):
+                instrument = request.GET.get('instrument_list')
+                instrument = Instruments.objects.get(name=instrument)
+                instrument_list = ToggleInstrument(judge=request.user)
+
+                ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
+                set = ApplicantFormSet(queryset=Applicant.objects.filter(instrument__exact=instrument).order_by('last_name'))
+                return render(request, 'AuditiON/applicant_selection.html', {'set':set, 'instrument_list':instrument_list})
+            else:
+                instrument_list = ToggleInstrument(judge=request.user)
+                return render(request, 'AuditiON/applicant_selection.html', {'instrument_list':instrument_list})
         
-        if (request.POST):
+        if (request.method == 'POST'):
             ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
             set = ApplicantFormSet(request.POST)
             if (set.is_valid):
@@ -258,6 +264,7 @@ def on_admin_home(request):
     """ Admin home page """
     if (request.user.is_superuser):
         count = Applicant.objects.count()
+        
         return render(request, 'AuditiON/on_admin_home.html', {'count':count})
     else:
         return HttpResponseRedirect(reverse('access_denied'))
@@ -284,7 +291,11 @@ def on_admin_db_info(request):
 
 
 def on_admin_locks(request):
+    
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             locks = AuditionControl.objects.get(reference_name='controls')
             form = Locks(initial={'applicant_form_lock':locks.applicant_form_lock, 'judge_submission_form_lock':locks.judge_submission_form_lock})
@@ -307,6 +318,9 @@ def on_admin_locks(request):
 def on_admin_judge_home(request):
     """ Admin home for judge data and control """
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             judges = User.objects.all()
             count = Applicant.objects.count()
@@ -319,6 +333,9 @@ def on_admin_judge_home(request):
 def on_admin_create_judge(request):
     """ Create Judges """
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = CreateJudge()
             count = Applicant.objects.count()
@@ -346,6 +363,9 @@ def on_admin_create_judge(request):
 def on_admin_delete_judge(request):
     """ Delete judges """
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = DeleteJudge()
             return render(request, 'AuditiON/on_admin_delete_judge.html', {'form':form})
@@ -364,6 +384,9 @@ def on_admin_delete_judge(request):
 
 def on_admin_change_judge_email(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = ChangeJudgeEmail()
             return render(request, 'AuditiON/on_admin_change_judge_email.html', {'form':form})
@@ -386,6 +409,9 @@ def on_admin_change_judge_email(request):
 
 def on_admin_change_judge_password(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = ChangeJudgePassword()
             return render(request, 'AuditiON/on_admin_change_judge_password.html', {'form':form})
@@ -407,6 +433,9 @@ def on_admin_change_judge_password(request):
 
 def on_admin_instrument_home(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = Instruments.objects.all()
             return render(request, 'AuditiON/on_admin_instrument_home.html', {'form':form})
@@ -416,6 +445,9 @@ def on_admin_instrument_home(request):
 
 def on_admin_create_instrument(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             instruments = Instruments.objects.all()
             form = CreateInstrument()
@@ -432,6 +464,9 @@ def on_admin_create_instrument(request):
 
 def on_admin_delete_instrument(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             instruments = Instruments.objects.all()
             form = DeleteInstrument()
@@ -449,6 +484,9 @@ def on_admin_delete_instrument(request):
 def on_admin_associate_judge(request):
     """ Associate judge with instrument """
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = AssociateJudge()
             return render(request, 'AuditiON/on_admin_associate_judge.html', {'form':form})
@@ -465,6 +503,9 @@ def on_admin_associate_judge(request):
 
 def on_admin_disassociate_judge(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET' and not request.GET.getlist('judges')):
             judge_form = DeleteJudge()
             return render(request, 'AuditiON/on_admin_disassociate_judge.html', {'judge_form':judge_form})
@@ -491,6 +532,9 @@ def on_admin_disassociate_judge(request):
 def on_admin_applicant_home(request):
     """ Admin home for applicant data and control """
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             applicants = Applicant.objects.all()
             count = Applicant.objects.count()
@@ -502,6 +546,9 @@ def on_admin_applicant_home(request):
 
 def on_admin_create_applicant(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = ApplicantForm()
             return render(request, 'AuditiON/on_admin_create_applicant.html', {'form':form})
@@ -518,6 +565,9 @@ def on_admin_create_applicant(request):
 
 def on_admin_delete_applicant(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = DeleteApplicant()
             return render(request, 'AuditiON/on_admin_delete_applicant.html', {'form':form})
@@ -535,6 +585,9 @@ def on_admin_delete_applicant(request):
 def on_admin_edit_applicant_select(request):
     """  for use with on_admin_edit_applicant """
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = SelectApplicant()
             return render(request, 'AuditiON/on_admin_edit_applicant_select.html', {'form':form})
@@ -547,6 +600,9 @@ def on_admin_edit_applicant_select(request):
 # could be done in one page as in on_admin_disassociate_judge
 def on_admin_edit_applicant(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             applicant_code = request.GET.getlist('applicant')
             applicant = Applicant.objects.get(code=applicant_code[0])
@@ -568,6 +624,9 @@ def on_admin_edit_applicant(request):
 
 def on_admin_principals_home(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+
         if (request.method == 'GET'):
             form = Principal.objects.all()
             return render(request, 'AuditiON/on_admin_principals_home.html', {'form':form})
@@ -577,6 +636,9 @@ def on_admin_principals_home(request):
 
 def on_admin_create_principal(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = CreatePrincipal()
             return render(request, 'AuditiON/on_admin_create_principal.html', {'form':form})
@@ -592,6 +654,9 @@ def on_admin_create_principal(request):
 
 def on_admin_delete_principal(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = DeletePrincipal()
             return render(request, 'AuditiON/on_admin_delete_principal.html', {'form':form})
@@ -611,6 +676,9 @@ def on_admin_delete_principal(request):
 def on_admin_edit_principal_select(request):
     """  for use with on_admin_edit_applicant """
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             form = SelectPrincipal()
             return render(request, 'AuditiON/on_admin_edit_principal_select.html', {'form':form})
@@ -621,6 +689,9 @@ def on_admin_edit_principal_select(request):
 
 def on_admin_edit_principal(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             principal_code = request.GET.getlist('principal')
             principal = Principal.objects.get(code=principal_code[0])
@@ -640,6 +711,9 @@ def on_admin_edit_principal(request):
 
 def on_admin_production_data_home(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             production_data = ProductionData.objects.get(name='production_data')
             form = ProductionDataForm(instance=production_data)
@@ -657,6 +731,9 @@ def on_admin_production_data_home(request):
 
 def on_admin_email_home(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             return render(request, 'AuditiON/on_admin_email_home.html')
     
@@ -666,6 +743,9 @@ def on_admin_email_home(request):
 
 def on_admin_email_accepted(request):
     if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        
         if (request.method == 'GET'):
             accepted_confirmation = StockEmailData.objects.get(email_name='accepted_confirmation')
             form = StockEmailDataForm(instance=accepted_confirmation)

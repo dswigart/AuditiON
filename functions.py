@@ -2,7 +2,11 @@ import re
 
 from django.contrib.auth.models import User
 
+from django.core.urlresolvers import reverse
+
 from AuditiON.models import Applicant, Instruments, Principal
+from AuditiON.constants import get_brian_username
+from django.http import HttpResponse, HttpResponseRedirect
 
 def youtube_split(link):
     """ Formats youtube string to embed in site """
@@ -22,6 +26,12 @@ def youtube_split(link):
         slice = x[3:]
         return slice
 
+
+def deny_brian(unicode_username):
+    if (unicode_username == get_brian_username()):
+        return True
+    else:
+        return False
 
 def get_filtered_db_info(data):
     """ Filters info for db_info page display """

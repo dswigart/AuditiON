@@ -30,12 +30,14 @@
             <div id="Navigation">
                 <p><a href="{% url 'on_admin_logout' %}">Logout</a></p>
                 <p><a href="{% url 'on_admin_home' %}">Admin Home</a></p>
+                {% if not user.get_username == 'boiledjar' %}
                 <p><a href="{% url 'on_admin_locks' %}">Locks</p>
+                {% endif %}
                 <p><a href="{% url 'on_admin_db_info' %}">Database Info</a></p>
                 
                 <br>
                 
-                
+                {% if not user.get_username == 'boiledjar' %}
                 <p><a href="{% url 'on_admin_judge_home' %}">Judges</p>
                 
                 <p><a href="{% url 'on_admin_applicant_home' %}">Applicants</p>
@@ -46,7 +48,7 @@
                     
                     <p><a href="{% url 'on_admin_production_data_home' %}">ProductionData</p>
                     <p><a href="{% url 'on_admin_email_home' %}">Email</p>
-
+                {% endif %}
             </div>
         </div>
     </div>

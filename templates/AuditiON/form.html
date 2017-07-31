@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block Instructions %}
-<p>Please fill in your information below and submit to be considered for the Orchestra Next 2016-17 season.</p>
+<p align="center"><u>Orchestra Fellowship Application 2017-18<br>
+Due October 22nd</u></p>
 
 <hr>
 {% endblock %}
@@ -9,30 +10,161 @@
 {% block Content %}
 <form action="{% url 'audition_form' %}" method="post">
     {% csrf_token %}
-    {% for field in form %}
     
-        <br>
-        {{ field.label_tag }}
-        <br>
-        {% if field.errors %}
-        {{ field.errors }}
-        {% endif %}
-        {% if field.help_text %}
-        {{ field.help_text }}<br>
-        {% endif %}
-
-        {{ field }}
-
-        {% if field.id_for_label == "id_availability" %}
-        <br>
-        {% autoescape off %}
-        {{ production_data.data }}
-        {% endautoescape %}
-        <br>
-        {% endif %}
-    {% endfor %}
-    <br>
+    <table>
+    <tr>
+        <td class="applicant_form_table">
+            {{ form.first_name.label_tag }}<br>
+            
+            {% if form.first_name.errors %}
+                {{ form.first_name.errors }}
+            {% endif %}
+            {% if form.first_name.help_text %}
+                {{ form.first_name.help_text }}<br>
+            {% endif %}
+            
+            {{ form.first_name }}</td>
+        
+        <td class="applicant_form_table">
+            {{ form.last_name.label_tag }}<br>
+            
+            {% if form.last_name.errors %}
+                {{ form.last_name.errors }}
+            {% endif %}
+            {% if form.last.name.help_text %}
+                {{ form.last_name.help_text }}<br>
+            {% endif %}
+            
+            {{ form.last_name }}</td>
+        
+    </tr>
+    <tr>
+        <td class="applicant_form_table">
+            {{ form.phone_number.label_tag }}<br>
+            
+            {% if form.phone_number.errors %}
+                {{ form.phone_number.errors }}
+            {% endif %}
+            {% if form.phone_number.help_text %}
+                {{ form.phone_number.help_text }}<br>
+            {% endif %}
+            
+            {{ form.phone_number }}</td>
+        
+        <td class="applicant_form_table">
+            {{ form.email_address.label_tag }}<br>
+            
+            {% if form.email_address.errors %}
+                {{ form.email_address.errors }}
+            {% endif %}
+            {% if form.email_address.help_text %}
+                {{ form.email_address.help_text }}<br>
+            {% endif %}
+            
+            {{ form.email_address }}</td>
+        
+    </tr>
+    <tr>
+        <td class="applicant_form_table">
+            {{ form.zip_code.label_tag }}<br>
+            
+            {% if form.zip_code.errors %}
+            {{ form.zip_code.errors }}
+            {% endif %}
+            {% if form.zip_code.help_text %}
+            {{ form.zip_code.help_text }}<br>
+            {% endif %}
+            
+            {{ form.zip_code }}</td>
+        
+        <td class="applicant_form_table">
+            {{ form.age.label_tag }}<br>
+            
+            {% if form.age.errors %}
+            {{ form.age.errors }}
+            {% endif %}
+            {% if form.age.help_text %}
+            {{ form.age.help_text }}<br>
+            {% endif %}
+            
+            {{ form.age }}</td>
+        
+    </tr>
+    <tr>
+        <td class="applicant_form_table">
+            {{ form.instrument.label_tag }}<br>
+            
+            {% if form.instrument.errors %}
+            {{ form.instrument.errors }}
+            {% endif %}
+            {% if form.instrument.help_text %}
+            {{ form.instrument.help_text }}<br>
+            {% endif %}
+            
+            {{ form.instrument }}</td>
+        
+        <td class="applicant_form_table">
+            {{ form.school.label_tag }}<br>
+            
+            {% if form.school.errors %}
+            {{ form.school.errors }}
+            {% endif %}
+            {% if form.school.help_text %}
+            {{ form.school.help_text }}<br>
+            {% endif %}
+            
+            {{ form.school }}</td>
+        
+    </tr>
+  </table>
+    <div id="applicant_form_footer">
+    {{ form.youtube_link.label_tag }}<br>
+            
+    {% if form.youtube_link.errors %}
+        {{ form.youtube_link.errors }}
+    {% endif %}
+    {% if form.youtube_link.help_text %}
+        {{ form.youtube_link.help_text }}<br>
+    {% endif %}
+    
+    {{ form.youtube_link }}<br>
+        
+        
+    {% autoescape off %}
+    {{ production_data.data }}
+    {% endautoescape %}<br><br>
+    
+    
+    {{ form.availability.label_tag }}<br>
+    
+    {% if form.availability.errors %}
+    {{ form.availability.errors }}
+    {% endif %}
+    {% if form.availability.help_text %}
+    {{ form.availability.help_text }}<br>
+    {% endif %}
+    
+    {{ form.availability }}<br>
+    
+    
+    {{ form.avail_explain.label_tag }}<br>
+    
+    {% if form.avail_explain.errors %}
+    {{ form.avail_explain.errors }}
+    {% endif %}
+    {% if form.avail_explain.help_text %}
+    {{ form.avail.explain.help_text }}<br>
+    {% endif %}
+    
+    {{ form.avail_explain }}<br>
+    
+    Application Fee: $10<br>
+    
     <input type="submit" value="Submit" />
+    
 </form>
+</div>
+
+
 
 {% endblock %}

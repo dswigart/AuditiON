@@ -5,6 +5,10 @@ body { background-image: url("background.jpeg");
     background-color: black;
     background-size: 100% 100%;
     margin: 0%
+    
+    font-family: Helvetica, Arial, sans-serif;
+    line-height: 17px;
+
 }
 
 img { display: block;
@@ -29,18 +33,47 @@ img { display: block;
 #Instructions {
     padding: 10px 0px 0px 0px;
     margin: 0px 0px 5px 0px;
-    font-size: 14pt;
+    font-size: 20px;
+    line-height: 23px;
 }
 
-label { 
-    font-size: 14pt;
+#Content {
+    font-size: 16px;
+    
+}
+
+Form {
+    box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px; border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; z-index: 1;
+}
+
+label {
+    font-size: 18px;
+    line-height: 21px;
     
     
 }
 
-input { margin: 0px 0px 20px 0px;
+#applicant_form_footer {
+    padding-left: 35px;
+    font-size: 16px;
+}
+
+.applicant_form_table {
+    width: 200px;
+    padding-left: 35px;
+    padding-top: 5px;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 16px;
+
+}
+
+
+input { margin: 3px 0px 20px 0px;
     padding: 0px 0px 0px 0px;
-    /*height: 50px;*/
+    height:17px;
+    width: 150px;
+    font-size: 12px
 
 }
 

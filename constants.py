@@ -64,6 +64,11 @@ def ADD_IGNORE(tuple):
     return list
 
 
+def get_brian_username():
+    name = 'boiledjar'
+    return unicode(name)
+
+
 LOCK = (
         ('Unlocked', 'Unlocked'),
         ('Locked', 'Locked'),
