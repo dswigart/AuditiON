@@ -6,9 +6,7 @@ body { background-image: url("background.jpeg");
     background-size: 100% 100%;
     margin: 0%
     
-    font-family: Helvetica, Arial, sans-serif;
-    line-height: 17px;
-
+    
 }
 
 img { display: block;
@@ -33,13 +31,15 @@ img { display: block;
 #Instructions {
     padding: 10px 0px 0px 0px;
     margin: 0px 0px 5px 0px;
-    font-size: 20px;
-    line-height: 23px;
+    font-size: 22px;
+    line-height: 24px;
 }
 
 #Content {
     font-size: 16px;
-    
+    font-family: Helvetica, Arial, sans-serif;
+    line-height: 17px;
+
 }
 
 Form {
@@ -53,8 +53,7 @@ label {
 
 #applicant_form_footer {
     padding-left: 35px;
-    font-size: 16px;
-    font-family: Helvetica, Arial, sans-serif;
+    
 
 }
 
@@ -64,8 +63,7 @@ label {
     padding-top: 5px;
     font-weight: bold;
     text-decoration: underline;
-    font-size: 16px;
-    font-family: Helvetica, Arial, sans-serif;
+    
 
 }
 

@@ -119,13 +119,14 @@ Due October 22nd</u></p>
   </table>
     <div id="applicant_form_footer">
     {{ form.youtube_link.label_tag }}<br>
-            
-    {% if form.youtube_link.errors %}
-        {{ form.youtube_link.errors }}
-    {% endif %}
+    
     {% if form.youtube_link.help_text %}
         {{ form.youtube_link.help_text }}<br>
     {% endif %}
+    {% if form.youtube_link.errors %}
+        {{ form.youtube_link.errors }}
+    {% endif %}
+    
     
     {{ form.youtube_link }}<br>
         
