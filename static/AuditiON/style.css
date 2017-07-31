@@ -54,6 +54,8 @@ label {
 #applicant_form_footer {
     padding-left: 35px;
     font-size: 16px;
+    font-family: Helvetica, Arial, sans-serif;
+
 }
 
 .applicant_form_table {
@@ -63,6 +65,7 @@ label {
     font-weight: bold;
     text-decoration: underline;
     font-size: 16px;
+    font-family: Helvetica, Arial, sans-serif;
 
 }
 
