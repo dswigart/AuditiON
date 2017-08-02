@@ -118,6 +118,7 @@ Due October 22nd</u></p>
     </tr>
   </table>
     <div id="applicant_form_footer">
+         <div id="non_table_audition_form_elements">
     {{ form.youtube_link.label_tag }}<br>
     
     {% if form.youtube_link.help_text %}
@@ -135,7 +136,7 @@ Due October 22nd</u></p>
     {{ production_data.data }}
     {% endautoescape %}<br><br>
     
-    
+   
     {{ form.availability.label_tag }}<br>
     
     {% if form.availability.errors %}
@@ -164,6 +165,7 @@ Due October 22nd</u></p>
     <input type="submit" value="Submit" />
     
 </form>
+</div>
 </div>
 
 

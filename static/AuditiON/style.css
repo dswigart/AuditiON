@@ -68,6 +68,11 @@ label {
 
 }
 
+#non_table_audition_form_elements label {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 
 input { margin: 3px 0px 20px 0px;
     padding: 0px 0px 0px 0px;
