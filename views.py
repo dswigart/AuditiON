@@ -781,7 +781,7 @@ def on_admin_data(request):
 
 
 def on_admin_accepted_confirmed(request):
-    """ Create CSB of accepted/alternate applicants who have confirmed for download """
+    """ Create CSV of accepted/alternate applicants who have confirmed for download """
     if (request.user.is_superuser):
         #Create the HttpResponse object with the appropriate CSV header.
         response = HttpResponse(content_type='text/csv')

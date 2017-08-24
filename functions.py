@@ -37,7 +37,8 @@ def get_filtered_db_info(data):
     """ Filters info for db_info page display """
     query = Applicant.objects.all()
     if (data['instrument'] != 'Ignore'):
-        query = query.filter(instrument__exact=data['instrument'])
+        instrument = Instruments.objects.get(name=data['instrument'])
+        query = query.filter(instrument__exact=instrument)
     if (data['status'] != 'Ignore'):
         query = query.filter(status__exact=data['status'])
     if (data['confirmation'] != 'Ignore'):

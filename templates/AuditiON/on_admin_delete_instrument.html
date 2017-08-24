@@ -8,7 +8,7 @@
 
 <h2>Delete Instrument</h2>
 
-
+<p style="color:red">Don't delete an instrument during the audition -- this will erase all associations in Judges/Applicants to that instrument (probably not good). If for any reason you need to do this, talk to David first :-)</p>
 <form action="{% url 'on_admin_delete_instrument' %}" method="post">
     {% csrf_token %}
     

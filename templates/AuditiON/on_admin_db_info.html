@@ -8,14 +8,14 @@
 
 <h2>Filters</h2>
 
-Use the following filters to refine the data search. To see the entire database, set all filters to the '---' setting.
+Use the following filters to refine the data search. To see the entire database, set all filters to the '---' setting.<br><br>
 
 <form action="{% url 'on_admin_db_info' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
-        <br>
+    
         {{ field.label_tag }}
-        <br>
+       
         {% if field.errors %}
             {{ field.errors }}
         {% endif %}
@@ -43,12 +43,25 @@ Use the following filters to refine the data search. To see the entire database,
 
     <p><a href="{% url 'on_admin_accepted_confirmed' %}">Download accepted/alternate applicants who have confirmed as spreadsheet</a></p>
     
-    <p>Click to display email list for current query (doesn't work yet, email's are displayed below)</p>
-
+    
+<script>
+    function showEmails() {
+        var x = document.getElementById('applicant_emails');
+        if (x.style.display === 'none') {
+            x.style.display = 'block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
+</script>
+<button onclick="showEmails()">Click to show/hide emails for current query</button>
+    <div id="applicant_emails" style="display: none;">
+    <p>
     {% for applicant in set %}
         {{ applicant.email_address }},
     {% endfor %}
-
+    </p>
+    </div>
 <hr>
 
 <h2>Database Query</h2>
@@ -58,7 +71,7 @@ Use the following filters to refine the data search. To see the entire database,
     <tr>
         <td class="tablelabel"><b>Name</b></td>
         <td class="tablevalue"><b>{{ applicant.first_name }} {{ applicant.last_name }}</b></td>
-        <td id="tableavail" rowspan="11">{{ applicant.avail_explain }}</td>
+        <td id="tableavail" rowspan="12">{{ applicant.avail_explain }}</td>
     </tr>
     <tr>
         <td class="tablelabel">email</td>
