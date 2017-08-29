@@ -31,6 +31,11 @@ AVAILABILITY_LIST = (
     (AVAIL_SOME, 'Some'),
     )
 
+YES_NO = (
+    ('Yes', 'Yes'),
+    ('No', 'No'),
+    )
+
 #for use in forms
 INSTRUMENT_LIST = (
    (FLUTE, FLUTE),

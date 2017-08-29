@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
-from AuditiON.constants import AVAILABILITY_LIST, CONFIRMATION_CHOICES, STATUS_CHOICES, RANKING_CHOICES, LOCK
+from AuditiON.constants import AVAILABILITY_LIST, CONFIRMATION_CHOICES, STATUS_CHOICES, RANKING_CHOICES, LOCK, YES_NO
 
 # hack 'UniqueUsername': neccesary in order to keep superusers and users from having the same name.
 # fixes: the system may load one when the other was intended--now it cannot.
@@ -73,6 +73,7 @@ class Applicant(models.Model):
     availability = models.CharField('Availability', max_length=6,
                                     choices=AVAILABILITY_LIST)
     avail_explain = models.TextField('Availability Explaination', default='All', help_text='If \'some\' was marked above, please note rehearsals or shows you cannot attend and provide a brief explaination.')
+    work_eligibility = models.CharField('Are you eligible to work in the USA?', max_length=6, choices=YES_NO)
     ranking = models.CharField('Ranking', max_length=15, choices=RANKING_CHOICES, default='Unassigned')
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='Undetermined')
     confirmation = models.CharField(max_length=12, choices=CONFIRMATION_CHOICES, default='Unconfirmed')

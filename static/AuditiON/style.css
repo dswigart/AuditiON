@@ -16,7 +16,7 @@ img { display: block;
 #BigWrapper { background: white;
     margin: auto;
     width: 85%;
-    min-height: 900px;
+    min-height: 600px;
     
 }
 
@@ -24,7 +24,7 @@ img { display: block;
     margin: auto;
     width: 50%;
     font: Arial;
-    
+    min-height: 600px;
     
 }
 
@@ -38,13 +38,41 @@ img { display: block;
 
 #Content {
     font-size: 16px;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: Arial Narrow, Arial, sans-serif;
     line-height: 17px;
+    padding-bottom: 30px;
+
+}
+
+#Footer {
+    background-color: rgb(75,75,75);
+}
+
+.FooterBox {
+    font-family: Arial Narrow, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+    color: rgb(158,158,158);
+    
+    width: 220px;
+    min-height: 310px;
+    display: inline-block;
+    margin-left: 75px;
+    vertical-align: top;
+    
+}
+
+.FooterBox h3 {
+    font-family: Arial Narrow, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+    color: rgb(220,220,220);
 
 }
 
 Form {
     box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px; border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; z-index: 1;
+    padding: 10px 0px 0px 10px;
 }
 
 label {
@@ -60,12 +88,16 @@ label {
 
 .applicant_form_table {
     width: 200px;
-    padding-left: 35px;
-    padding-top: 5px;
+    padding-left: 30px;
     font-weight: bold;
     text-decoration: underline;
     
 
+}
+
+.applicant_form_table p {
+    margin: 0px 0px 3px 0px;
+    
 }
 
 #non_table_audition_form_elements label {
@@ -73,6 +105,13 @@ label {
     text-decoration: underline;
 }
 
+#non_table_audition_form_elements p {
+    margin: 0px 0px 3px 0px;
+}
+
+#non_table_audition_form_elements textarea {
+    margin-top: 3px;
+}
 
 input { margin: 3px 0px 20px 0px;
     padding: 0px 0px 0px 0px;

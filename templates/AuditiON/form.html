@@ -92,7 +92,7 @@ Due October 22nd</u></p>
     </tr>
     <tr>
         <td class="applicant_form_table">
-            {{ form.instrument.label_tag }}<br>
+            <p>{{ form.instrument.label_tag }}</p>
             
             {% if form.instrument.errors %}
             {{ form.instrument.errors }}
@@ -137,7 +137,7 @@ Due October 22nd</u></p>
     {% endautoescape %}<br><br>
     
    
-    {{ form.availability.label_tag }}<br>
+    <p>{{ form.availability.label_tag }}</p>
     
     {% if form.availability.errors %}
     {{ form.availability.errors }}
@@ -149,7 +149,7 @@ Due October 22nd</u></p>
     {{ form.availability }}<br>
     
     
-    {{ form.avail_explain.label_tag }}<br>
+    {{ form.avail_explain.label_tag }}
     
     {% if form.avail_explain.errors %}
     {{ form.avail_explain.errors }}
@@ -159,6 +159,17 @@ Due October 22nd</u></p>
     {% endif %}
     
     {{ form.avail_explain }}<br>
+    
+    <p>{{ form.work_eligibility.label_tag }}</p>
+    
+    {% if form.work_eligibility.errors %}
+    {{ form.work_eligibility.errors }}
+    {% endif %}
+    {% if form.work_eligibility.help_text %}
+    {{ form.work_eligibility.help_text }}<br>
+    {% endif %}
+    
+    {{ form.work_eligibility }}<br>
     
     Application Fee: $10<br>
     

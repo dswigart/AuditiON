@@ -198,7 +198,8 @@ def applicant_selection(request):
 
                 ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
                 set = ApplicantFormSet(queryset=Applicant.objects.filter(instrument__exact=instrument).order_by('last_name'))
-                return render(request, 'AuditiON/applicant_selection.html', {'set':set, 'instrument_list':instrument_list})
+                print dir(set)
+                return render(request, 'AuditiON/applicant_selection.html', {'instrument':instrument, 'set':set, 'instrument_list':instrument_list})
             else:
                 instrument_list = ToggleInstrument(judge=request.user)
                 return render(request, 'AuditiON/applicant_selection.html', {'instrument_list':instrument_list})

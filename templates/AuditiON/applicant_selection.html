@@ -26,6 +26,9 @@ Select instrument to judge:
 </form>
 
 {% if set %}
+<br>
+Displaying all {{ instrument }} applicants:
+<br>
 <form action="{% url 'applicant_selection' %}" method="post">
     {{ set.management_form }}
     {% csrf_token %}
