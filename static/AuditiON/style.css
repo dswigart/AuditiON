@@ -70,7 +70,7 @@ img { display: block;
 
 }
 
-Form {
+.shadow_box {
     box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px; border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; z-index: 1;
     padding: 10px 0px 0px 10px;
 }
@@ -100,25 +100,47 @@ label {
     
 }
 
-#non_table_audition_form_elements label {
+.applicant_form_table input { margin: 3px 0px 20px 0px;
+    padding: 0px 0px 0px 0px;
+    height:17px;
+    width: 150px;
+    font-size: 12px
+    
+}
+
+.non_table_audition_form_elements label {
     font-weight: bold;
     text-decoration: underline;
 }
 
-#non_table_audition_form_elements p {
+.non_table_audition_form_elements p {
     margin: 0px 0px 3px 0px;
 }
 
-#non_table_audition_form_elements textarea {
+.non_table_audition_form_elements textarea {
     margin-top: 3px;
 }
 
-input { margin: 3px 0px 20px 0px;
+.non_table_audition_form_elements input { margin: 3px 0px 20px 0px;
+    padding: 0px 0px 0px 0px;
+    height:17px;
+    width: 150px;
+    font-size: 12px
+    
+}
+
+.input_1 { margin: 3px 0px 20px 0px;
     padding: 0px 0px 0px 0px;
     height:17px;
     width: 150px;
     font-size: 12px
 
+}
+
+.paypal_button {
+    position: relative;
+    bottom: 76px;
+    left: 225px;
 }
 
 select { margin: 0px 0px 20px 0px;

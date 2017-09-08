@@ -8,7 +8,7 @@ Due October 22nd</u></p>
 {% endblock %}
 
 {% block Content %}
-<form action="{% url 'audition_form' %}" method="post">
+<form action="{% url 'audition_form' %}" method="post" class="shadow_box">
     {% csrf_token %}
     
     <table>
@@ -118,7 +118,7 @@ Due October 22nd</u></p>
     </tr>
   </table>
     <div id="applicant_form_footer">
-         <div id="non_table_audition_form_elements">
+         <div class="non_table_audition_form_elements">
     {{ form.youtube_link.label_tag }}<br>
     
     {% if form.youtube_link.help_text %}
@@ -131,7 +131,7 @@ Due October 22nd</u></p>
     
     {{ form.youtube_link }}<br>
         
-        
+    
     {% autoescape off %}
     {{ production_data.data }}
     {% endautoescape %}<br><br>
@@ -174,12 +174,22 @@ Due October 22nd</u></p>
     Click here to pay application fee: $10 
 
 <br>
+<br>
     
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" class="input_1" />
     
 </form>
 
+
+</form>
+
+
 </div>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" class="paypal_button">
+    <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="C6EMSB9JD7QTA">
+            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </div>
 
 

@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block Content %}
-<form action="{% url 'audition_form_confirmation' %}" method="post">
+<form action="{% url 'audition_form_confirmation' %}" method="post" class="shadow_box">
     {% csrf_token %}
     {% for field in form %}
         
@@ -24,7 +24,7 @@
             
     {% endfor %}
     <br>
-    <input type="submit" value="Submit" onclick="this.disabled=true,this.form.submit()" />
+    <input type="submit" value="Submit" onclick="this.disabled=true,this.form.submit()" class="input_1" />
 </form>
 
 {% endblock %}
