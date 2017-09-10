@@ -76,10 +76,14 @@ def audition_form_confirmation(request):
             form.instance.youtube_link = functions.youtube_split(form.instance.youtube_link)
             form.instance.code = uuid.uuid4().hex
             form.save()
-                #try:
-                #  send_mail('Application Submitted', '%s %s, %s' % (form.instance.first_name, form.instance.last_name, form.instance.instrument), 'orchestranext@gmail.com', ['orchestranext@gmail.com'], fail_silently=True,)
-                #except Exception:
-                #    pass
+            try:
+                send_mail('Application Submitted', '%s %s, %s' % (form.instance.first_name, form.instance.last_name, form.instance.instrument), 'orchestranext@gmail.com', ['orchestranext@gmail.com'], fail_silently=True,)
+            except Exception:
+                pass
+            try:
+                send_mail('Application Submitted', 'Dear %s,\n\nThis email confirmed that we have received your application for the 2017-18 season!\n\nYou will be notified of the results by email on Nov. 1. We wish you the very best of luck!\n\nCheers,\n\nOrchestra Next\nBrian McWhorter, music director\nSarah Viens, trumpet/artistic admin' % (form.instance.first_name, ), 'orchestranext@gmail.com', [form.instance.email_address], fail_silently=True,)
+            except Exception:
+                pass
             return HttpResponseRedirect('http://www.orchestranext.com/success')
         else:
             return render(request, 'AuditiON/form.html', {'form':form})
