@@ -204,7 +204,7 @@ Due October 22nd</u></p>
 };
 
 
-if (paybut()) {
+if (!paybut()) {
     var cols =     document.getElementsByClassName('paypal_button');
     for(i=0; i<cols.length; i++) {
         cols[i].style.left = '500px';
