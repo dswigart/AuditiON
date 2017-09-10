@@ -4,6 +4,11 @@
 <head>
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static "AuditiON/style.css" %}" />
+    <script type="text/javascript">
+        if (screen.width >= 800) {
+            document.getElementByClassName("paypal_button").style.left = "50px";}
+    </script>
+
     <title>{% block title %}AuditiON{% endblock %}</title>
 </head>
 
