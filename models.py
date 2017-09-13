@@ -21,7 +21,7 @@ class Legacy(models.Model):
 
 class Instruments(models.Model):
     """ Instruments """
-    name = models.CharField('Instrument Name', max_length=30)
+    name = models.CharField('Instrument Name', max_length=30, primary_key=True)
     judge = models.ForeignKey(User, related_name='ins', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
