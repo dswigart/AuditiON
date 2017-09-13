@@ -52,7 +52,7 @@ def get_filtered_db_info(data):
 
 def get_instrument_list():
     x = []
-    return x 
+    return x
 def hackget_instrument_list():
     """ Returns a list of tuples for choices in Applicant Instruments"""
 
