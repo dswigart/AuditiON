@@ -50,10 +50,8 @@ def get_filtered_db_info(data):
 
     return query
 
+
 def get_instrument_list():
-    x = []
-    return x
-def hackget_instrument_list():
     """ Returns a list of tuples for choices in Applicant Instruments"""
 
     instrument_list = []
@@ -63,10 +61,8 @@ def hackget_instrument_list():
         instrument_list.append(instrument_tuple)
     return instrument_list
 
+
 def get_judge_ins_list(judge):
-    x = []
-    return x
-def hackget_judge_ins_list(judge):
     """ Returns a list of tuples for choices in Applicant Instruments"""
     
     instrument_list = []
@@ -85,17 +81,15 @@ def get_judge_list():
         judge_list.append(judge_tuple)
     return judge_list
 
+
 def get_applicant_list():
-    x = []
-    return x
-def hackget_applicant_list():
     """ Returns a list of tuples for choices in Delete Applicant FIX THIS"""
     applicant_list = []
     applicants = Applicant.objects.all()
     for applicant in applicants:
-       display = '%s %s, %s' % (applicant.first_name, applicant.last_name, applicant.instrument)
-       applicant_tuple = (applicant.code, display)
-       applicant_list.append(applicant_tuple)
+        display = '%s %s, %s' % (applicant.first_name, applicant.last_name, applicant.instrument)
+        applicant_tuple = (applicant.code, display)
+        applicant_list.append(applicant_tuple)
     return applicant_list
 
 
