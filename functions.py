@@ -86,9 +86,9 @@ def get_applicant_list():
     applicant_list = []
     applicants = Applicant.objects.all()
     for applicant in applicants:
-        display = '%s %s, %s' % (applicant.first_name, applicant.last_name, applicant.instrument)
-        applicant_tuple = (applicant.code, display)
-        applicant_list.append(applicant_tuple)
+       display = '%s %s, %s' % (applicant.first_name, applicant.last_name, applicant.instrument)
+       applicant_tuple = (applicant.code, display)
+       applicant_list.append(applicant_tuple)
     return applicant_list
 
 
