@@ -171,7 +171,16 @@ Due October 22nd</u></p>
     
     {{ form.work_eligibility }}<br>
     
-    Click here to pay application fee: $10 
+    <script type="text/javascript">
+        if (screen.width >= 800) {
+            document.write("Click here to pay application fee: $10");
+        }
+    
+        if (screen.width <= 800) {
+            document.write("Click to pay application fee $10");
+        }
+
+    </script>
 
 <br>
 <br>
