@@ -185,14 +185,16 @@ li { color: red;
     
 }
 
-/* Small screens */
-@media all and (max-width: 500px) {
+/* Medium screens */
+@media all and (max-width: 1000px) {
     .applicant_form {
-        justify-content: center;
+        display: block;
+        text-align: center;
     }
     
-    .applicant_form_table {
-        
+    .applicant_form_footer {
+        display: block;
+        text-align: center;
     }
     
     textarea {
@@ -209,9 +211,11 @@ li { color: red;
         margin: 45px 0px 20px 0px;
     }
     
+}
+
+@media all and (max-width: 600px) {
     #Wrapper {
         width: 80%;
     }
+
 }
-
-
