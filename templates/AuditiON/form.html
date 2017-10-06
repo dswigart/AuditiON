@@ -11,9 +11,8 @@ Due October 22nd</u></p>
 <form action="{% url 'audition_form' %}" method="post" class="shadow_box">
     {% csrf_token %}
     
-    <table>
-    <tr>
-        <td class="applicant_form_table">
+    <ul class="applicant_form">
+        <li class="applicant_form_table">
             {{ form.first_name.label_tag }}<br>
             
             {% if form.first_name.errors %}
@@ -23,9 +22,9 @@ Due October 22nd</u></p>
                 {{ form.first_name.help_text }}<br>
             {% endif %}
             
-            {{ form.first_name }}</td>
+            {{ form.first_name }}</li>
         
-        <td class="applicant_form_table">
+        <li class="applicant_form_table">
             {{ form.last_name.label_tag }}<br>
             
             {% if form.last_name.errors %}
@@ -35,11 +34,9 @@ Due October 22nd</u></p>
                 {{ form.last_name.help_text }}<br>
             {% endif %}
             
-            {{ form.last_name }}</td>
+            {{ form.last_name }}</li>
         
-    </tr>
-    <tr>
-        <td class="applicant_form_table">
+        <li class="applicant_form_table">
             {{ form.phone_number.label_tag }}<br>
             
             {% if form.phone_number.errors %}
@@ -49,9 +46,9 @@ Due October 22nd</u></p>
                 {{ form.phone_number.help_text }}<br>
             {% endif %}
             
-            {{ form.phone_number }}</td>
+            {{ form.phone_number }}</li>
         
-        <td class="applicant_form_table">
+        <li class="applicant_form_table">
             {{ form.email_address.label_tag }}<br>
             
             {% if form.email_address.errors %}
@@ -61,11 +58,9 @@ Due October 22nd</u></p>
                 {{ form.email_address.help_text }}<br>
             {% endif %}
             
-            {{ form.email_address }}</td>
+            {{ form.email_address }}</li>
         
-    </tr>
-    <tr>
-        <td class="applicant_form_table">
+        <li class="applicant_form_table">
             {{ form.zip_code.label_tag }}<br>
             
             {% if form.zip_code.errors %}
@@ -75,9 +70,9 @@ Due October 22nd</u></p>
             {{ form.zip_code.help_text }}<br>
             {% endif %}
             
-            {{ form.zip_code }}</td>
+            {{ form.zip_code }}</li>
         
-        <td class="applicant_form_table">
+        <li class="applicant_form_table">
             {{ form.age.label_tag }}<br>
             
             {% if form.age.errors %}
@@ -87,11 +82,9 @@ Due October 22nd</u></p>
             {{ form.age.help_text }}<br>
             {% endif %}
             
-            {{ form.age }}</td>
+            {{ form.age }}</li>
         
-    </tr>
-    <tr>
-        <td class="applicant_form_table">
+        <li class="applicant_form_table">
             <p>{{ form.instrument.label_tag }}</p>
             
             {% if form.instrument.errors %}
@@ -101,9 +94,9 @@ Due October 22nd</u></p>
             {{ form.instrument.help_text }}<br>
             {% endif %}
             
-            {{ form.instrument }}</td>
+            {{ form.instrument }}</li>
         
-        <td class="applicant_form_table">
+        <li class="applicant_form_table">
             {{ form.school.label_tag }}<br>
             
             {% if form.school.errors %}
@@ -113,12 +106,13 @@ Due October 22nd</u></p>
             {{ form.school.help_text }}<br>
             {% endif %}
             
-            {{ form.school }}</td>
+            {{ form.school }}</li>
         
-    </tr>
-  </table>
-    <div id="applicant_form_footer">
-         <div class="non_table_audition_form_elements">
+        </ul>
+  
+    <ul class="applicant_form_footer">
+    
+    <li class="applicant_form_footer_table">
     {{ form.youtube_link.label_tag }}<br>
     
     {% if form.youtube_link.help_text %}
@@ -128,15 +122,16 @@ Due October 22nd</u></p>
         {{ form.youtube_link.errors }}
     {% endif %}
     
-    
+    <li class="applicant_form_footer_table">
     {{ form.youtube_link }}<br>
-        
+    </li>
     
     {% autoescape off %}
     {{ production_data.data }}
     {% endautoescape %}<br><br>
+    </li>
     
-   
+    <li class="applicant_form_footer_table">
     <p>{{ form.availability.label_tag }}</p>
     
     {% if form.availability.errors %}
@@ -147,8 +142,9 @@ Due October 22nd</u></p>
     {% endif %}
     
     {{ form.availability }}<br>
+    </li>
     
-    
+    <li class="applicant_form_footer_table">
     {{ form.avail_explain.label_tag }}
     
     {% if form.avail_explain.errors %}
@@ -159,7 +155,9 @@ Due October 22nd</u></p>
     {% endif %}
     
     {{ form.avail_explain }}<br>
+    </li>
     
+    <li class="applicant_form_footer_table">
     <p>{{ form.work_eligibility.label_tag }}</p>
     
     {% if form.work_eligibility.errors %}
@@ -170,6 +168,9 @@ Due October 22nd</u></p>
     {% endif %}
     
     {{ form.work_eligibility }}<br>
+    </li>
+    
+    </ul>
     
     <script type="text/javascript">
         if (screen.width >= 800) {

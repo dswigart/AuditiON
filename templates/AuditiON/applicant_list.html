@@ -13,7 +13,7 @@ the audition is closed.</p>
 
 <hr>
 Select instrument to judge:
-<form action="{% url 'applicant_list' %}" method="post">
+<form action="{% url 'applicant_list' %}" method="post" class="shadow_box">
     
     {% csrf_token %}
     {% for field in instrument_list %}

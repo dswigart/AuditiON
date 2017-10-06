@@ -15,20 +15,20 @@
 {% block Content %}
 
 Select instrument to judge:
-<form action="{% url 'applicant_selection' %}" method="get">
+<form action="{% url 'applicant_selection' %}" method="get" class="shadow_box">
     
     {% csrf_token %}
     {% for field in instrument_list %}
     {{ field }}
     
     {% endfor %}
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit"/>
 </form>
 
 {% if set %}
 <br>
 Displaying all {{ instrument }} applicants:
-<br>
+<br><br>
 <form action="{% url 'applicant_selection' %}" method="post">
     {{ set.management_form }}
     {% csrf_token %}
