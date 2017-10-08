@@ -770,7 +770,7 @@ def on_admin_email_accepted_test(request):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
         ### build and send email
-        applicant = Applicant.objects.filter(status__exact='accepted_confirmation')
+        applicant = Applicant.objects.filter(status__exact='Accepted')
         eh = EmailHelper.EmailHelper()
         messages = eh.accepted_applicant_conf(applicant)
         for message in messages:
