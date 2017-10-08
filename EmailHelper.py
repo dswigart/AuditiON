@@ -10,12 +10,8 @@ class EmailHelper:
     """ Helps with preparing collections of email objects """
 
     def _get_fields(self, email_title):
-        try:
-            fields = StockEmailData.objects.get(email_name=email_title)
-        except ObjectDoesNotExist:
-            print('ObjectDoesNotExist: StockEmail missing')
-        except MultipleObjectsReturned:
-            print('MultipleObjectsReturned:  email_name should not be duplicated')
+        ###handle possible errors (fix)
+        fields = StockEmailData.objects.get(email_name=email_title)
         return fields
 
 
@@ -26,7 +22,7 @@ class EmailHelper:
     
     
     def accepted_applicant_conf(self, applicant_queryset):
-        fields = self._get_fields('accepted')
+        fields = self._get_fields('accepted_confirmation')
         messages = []
         for obj in applicant_queryset:
             message = ''

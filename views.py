@@ -18,7 +18,7 @@ from django.core.mail import send_mail
 from AuditiON.models import Applicant, ApplicantForm, CreateInstrument, AuditionControl, Instruments, ApplicantEditForm, Principal, CreatePrincipal, PrincipalEditForm, ProductionData, ProductionDataForm, StockEmailData, StockEmailDataForm
 from AuditiON.forms import ApplicantInfo, CreateJudge, DeleteJudge, DeleteInstrument, ChangeJudgeEmail, ChangeJudgePassword, AssociateJudge, Locks, DeleteApplicant, SelectApplicant, DeletePrincipal, SelectPrincipal, ToggleInstrument
 import AuditiON.functions as functions
-
+import AuditiON.EmailHelper as EmailHelper
 
 def index(request):
     return HttpResponseRedirect(reverse('audition_form'))
@@ -770,10 +770,11 @@ def on_admin_email_accepted_test(request):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
         ### build and send email
-        applicant = Aplicant.objects.filter(status__exact='Accepted')
-        eh = EmailHelper()
+        applicant = Applicant.objects.filter(status__exact='accepted_confirmation')
+        eh = EmailHelper.EmailHelper()
         messages = eh.accepted_applicant_conf(applicant)
-        messages.send()
+        for message in messages:
+            message.send()
         
         return HttpResponseRedirect(reverse('on_admin_email_accepted'))
         
