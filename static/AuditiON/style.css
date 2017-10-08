@@ -185,8 +185,9 @@ li { color: red;
     
 }
 
+
 /* Medium screens */
-@media all and (max-width: 1000px) {
+@media all and (max-width: 900px) {
     .applicant_form {
         display: block;
         text-align: center;
@@ -203,8 +204,8 @@ li { color: red;
     
     .paypal_button {
         position: relative;
-        bottom: 130px;
-        left: 27%;
+        bottom: 120px;
+        left: 30%;
     }
     
     .input_1 {
@@ -213,7 +214,9 @@ li { color: red;
     
 }
 
-@media all and (max-width: 600px) {
+
+/* Small screens */
+@media all and (max-width: 500px) {
     #Wrapper {
         width: 80%;
     }

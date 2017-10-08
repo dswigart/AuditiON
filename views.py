@@ -765,6 +765,21 @@ def on_admin_email_accepted(request):
         return HttpResponseRedirect(reverse('access_denied'))
 
 
+def on_admin_email_accepted_test(request):
+    if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+        ### build and send email
+        applicant = Aplicant.objects.filter(status__exact='Accepted')
+        eh = EmailHelper()
+        messages = eh.accepted_applicant_conf(applicant)
+        messages.send()
+        
+        return HttpResponseRedirect(reverse('on_admin_email_accepted'))
+        
+
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
 
 def on_admin_data(request):
     """ Create CSV of all applicants for download """

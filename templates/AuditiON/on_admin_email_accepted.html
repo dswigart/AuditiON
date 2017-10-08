@@ -31,7 +31,9 @@
 
 <hr>
 
-<h2>Production Data in the Database:</h2>
+<p><a href="{% url 'on_admin_email_accepted_test' %}">Send Test Email</a></p>
+
+<h2>Email will appear like this:</h2>
 {% autoescape off %}
 {{ production_data.data }}
 {% endautoescape %}
