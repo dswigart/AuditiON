@@ -35,7 +35,7 @@ img {
     margin: 0px 0px 5px 0px;
     font-size: 22px;
     line-height: 24px;
-    
+
 }
 
 #Content {
@@ -43,7 +43,11 @@ img {
     font-family: Arial Narrow, Arial, sans-serif;
     line-height: 17px;
     padding-bottom: 30px;
-    
+
+}
+
+Form input{
+    margin-bottom: 7px;
 }
 
 .applicant_form {
@@ -82,8 +86,6 @@ applicant_form_footer {
 .applicant_form_footer_table {
     list-style-type:none;
     color: black;
-    font-weight: bold;
-    text-decoration: underline;
 }
 
 .applicant_form_footer_table label {
@@ -113,7 +115,7 @@ applicant_form_footer {
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
-    
+
 }
 
 .FooterBox {
@@ -123,13 +125,13 @@ applicant_form_footer {
     color: rgb(158,158,158);
     text-align: center;
     max-width: 220px;
-    
-    
+
+
     /* min-height: 310px;
      display: inline-block;
      margin-left: px;
      vertical-align: top;*/
-    
+
 }
 
 .FooterBox h3 {
@@ -137,7 +139,7 @@ applicant_form_footer {
     font-size: 14px;
     line-height: 18px;
     color: rgb(220,220,220);
-    
+
 }
 
 .shadow_box {
@@ -156,7 +158,7 @@ label {
     height: 17px;
     width: 150px;
     font-size: 12px
-    
+
 }
 
 .paypal_button {
@@ -173,7 +175,7 @@ select {
 textarea {
     margin: 0px 0px 20px 0px;
     padding: 0px 0px 0px 0px;
-    
+
 }
 
 ul {
@@ -182,9 +184,12 @@ ul {
 }
 
 li { color: red;
-    
+
 }
 
+.success {
+  text-align: center;
+}
 
 /* Medium screens */
 @media all and (max-width: 900px) {
@@ -192,26 +197,26 @@ li { color: red;
         display: block;
         text-align: center;
     }
-    
+
     .applicant_form_footer {
         display: block;
         text-align: center;
     }
-    
+
     textarea {
         width: 180px;
     }
-    
+
     .paypal_button {
         position: relative;
         bottom: 120px;
         left: 30%;
     }
-    
+
     .input_1 {
         margin: 45px 0px 20px 0px;
     }
-    
+
 }
 
 

@@ -2,7 +2,6 @@
 
 {% block Instructions %}
 <p>You're logged in as {{ request.user.username }}</p>
-<p>{{ count }} applicants in the database.</p>
 
 <hr>
 
@@ -11,14 +10,14 @@
 <p style="color:red">Don't delete an instrument during the audition -- this will erase all associations in Judges/Applicants to that instrument (probably not good). If for any reason you need to do this, talk to David first :-)</p>
 <form action="{% url 'on_admin_delete_instrument' %}" method="post">
     {% csrf_token %}
-    
+
     {% for field in form %}
     {{  field.label_tag }}
     {{ field.errors }}
     {{  field  }}
     <br>
     {% endfor %}
-    
+
     <input type="submit" value="Submit" />
 </form>
 

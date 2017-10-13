@@ -2,7 +2,6 @@
 
 {% block Instructions %}
 <p>You're logged in as {{ request.user.username }}</p>
-<p>{{ count }} applicants in the database.</p>
 
 <hr>
 
@@ -11,13 +10,13 @@
 
 <form action="{% url 'on_admin_disassociate_judge' %}" method="get">
     {% csrf_token %}
-    
+
     {% for field in judge_form %}
-    
+
     {{field}}
     <br>
     {% endfor %}
-    
+
     <input type="submit" value="Submit" />
 </form>
 {% endif %}
@@ -28,19 +27,19 @@
 <form action="{% url 'on_admin_disassociate_judge' %}" method="post">
 
     {% csrf_token %}
-    
+
     {% for field in instrument_form %}
-    
+
     {{field}}
     <br>
     {% endfor %}
-    
+
     {% for field in judge_form2 %}
-    
+
     {{field.as_hidden}}
     <br>
     {% endfor %}
-    
+
     <input type="submit" value="Submit" />
 </form>
 {% endif %}
@@ -55,4 +54,3 @@
 
 
 {% endblock %}
-

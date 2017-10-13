@@ -2,7 +2,6 @@
 
 {% block Instructions %}
 <p>You're logged in as {{ request.user.username }}</p>
-<p>{{ count }} applicants in the database.</p>
 
 <hr>
 
@@ -11,7 +10,7 @@
 
 <form action="{% url 'on_admin_edit_principal' %}" method="post">
     {% csrf_token %}
-    
+
     {% for field in form %}
     {% if 'code' in field.id_for_label %}
     {{ field.as_hidden }}
@@ -23,7 +22,7 @@
     <br>
     {% endif %}
     {% endfor %}
-    
+
     <input type="submit" value="Submit" />
 </form>
 
@@ -36,4 +35,3 @@
 
 
 {% endblock %}
-

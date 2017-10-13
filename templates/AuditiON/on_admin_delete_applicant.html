@@ -2,7 +2,7 @@
 
 {% block Instructions %}
 <p>You're logged in as {{ request.user.username }}</p>
-<p>{{ count }} applicants in the database.</p>
+
 
 <hr>
 
@@ -12,13 +12,13 @@
 
 <form action="{% url 'on_admin_delete_applicant' %}" method="post">
     {% csrf_token %}
-    
+
     {% for field in form %}
-    
+
     {{field}}
     <br>
     {% endfor %}
-    
+
     <input type="submit" value="Submit" />
 </form>
 
@@ -31,4 +31,3 @@
 
 
 {% endblock %}
-
