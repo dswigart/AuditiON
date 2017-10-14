@@ -4,8 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from AuditiON.models import StockEmailData
 
-
-
 class EmailHelper:
     """ Helps with preparing collections of email objects """
 
@@ -19,8 +17,8 @@ class EmailHelper:
         link = 'https://www.sarahviens.com/AuditiON/applicant_confirmation/'
         link += '?code=%s' % code
         return link
-    
-    
+
+
     def accepted_applicant_conf(self, applicant_queryset):
         fields = self._get_fields('accepted_confirmation')
         messages = []
@@ -46,10 +44,3 @@ class EmailHelper:
             email = EmailMessage(fields.subject_line, message, 'dswigart@gmail.com',[obj.email_address])
             messages.append(email)
         return messages
-
-
-
-
-
-
-

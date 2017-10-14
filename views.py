@@ -32,7 +32,7 @@ def audition_form(request):
     except (ObjectDoesNotExist):
         return HttpResponseRedirect(reverse('database_problem'))
     lock = controls.applicant_form_lock
-    
+
     # redirect if audition is closed
     if (lock == 'Locked'):
         return HttpResponseRedirect(reverse('audition_closed'))
@@ -96,7 +96,7 @@ def applicant_confirmation(request):
     if (request.method == 'GET'):
         if 'code' in request.GET:
             Appform = modelform_factory(Applicant, fields=('first_name',
-                                                              'confirmation', 'code'))
+                                                              'confirmation', 'code', 'availability', 'avail_explain'))
             try:
                 x = Applicant.objects.get(code=request.GET['code'])
             except ObjectDoesNotExist:
@@ -104,8 +104,10 @@ def applicant_confirmation(request):
             if (x.confirmation == 'Unconfirmed'):
                 form = Appform(instance=x)
                 first_name = form.instance.first_name
+                availability = form.instance.availability
+                avail_explain = form.instance.avail_explain
                 return render(request, 'AuditiON/applicant_confirmation.html',
-                              {'form':form, 'first_name':first_name,})
+                              {'form':form, 'first_name':first_name, 'availability':availability, 'avail_explain':avail_explain})
             else:
                 return HttpResponseRedirect(reverse('already_confirmed'))
         else:
@@ -121,7 +123,7 @@ def applicant_confirmation(request):
             cursor = connection.cursor()
             cursor.execute('UPDATE "AuditiON_applicant" SET confirmation = %s WHERE code = %s', [form['confirmation'].data, form['code'].data])
             return HttpResponseRedirect('form_success')
-        
+
         # the only reason for invalid form is tampering, deny access
         else:
             return HttpResponseRedirect(reverse('access_denied'))
@@ -159,11 +161,11 @@ def judge_logout(request):
 def applicant_list(request):
     """ Displays applicants by instrument for judge evaluation """
     if request.user.is_active:
-        
+
         if (request.method == 'GET'):
             instrument_list = ToggleInstrument(judge=request.user)
             return render(request, 'AuditiON/applicant_list.html', {'instrument_list':instrument_list})
-                
+
         if (request.method == 'POST'):
             instrument = request.POST.get('instrument_list')
             instrument = Instruments.objects.get(name=instrument)
@@ -188,7 +190,7 @@ def applicant_selection(request):
     except (ObjectDoesNotExist):
         return HttpResponseRedirect(reverse('database_problem'))
     lock = controls.judge_submission_form_lock
-    
+
     # redirect if closed
     if (lock == 'Locked'):
         return HttpResponseRedirect(reverse('access_denied'))
@@ -207,7 +209,7 @@ def applicant_selection(request):
             else:
                 instrument_list = ToggleInstrument(judge=request.user)
                 return render(request, 'AuditiON/applicant_selection.html', {'instrument_list':instrument_list})
-        
+
         if (request.method == 'POST'):
             ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
             set = ApplicantFormSet(request.POST)
@@ -233,11 +235,11 @@ def audition_closed(request):
 def database_problem(request):
     return render(request, 'AuditiON/database_problem.html')
 
-                                            
+
 def access_denied(request):
     return render(request, 'AuditiON/access_denied.html')
 
-                                            
+
 def already_confirmed(request):
     return render(request, 'AuditiON/already_confirmed.html')
 
@@ -269,7 +271,7 @@ def on_admin_home(request):
     """ Admin home page """
     if (request.user.is_superuser):
         count = Applicant.objects.count()
-        
+
         return render(request, 'AuditiON/on_admin_home.html', {'count':count})
     else:
         return HttpResponseRedirect(reverse('access_denied'))
@@ -296,11 +298,11 @@ def on_admin_db_info(request):
 
 
 def on_admin_locks(request):
-    
+
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             locks = AuditionControl.objects.get(reference_name='controls')
             form = Locks(initial={'applicant_form_lock':locks.applicant_form_lock, 'judge_submission_form_lock':locks.judge_submission_form_lock})
@@ -325,7 +327,7 @@ def on_admin_judge_home(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             judges = User.objects.all()
             count = Applicant.objects.count()
@@ -340,7 +342,7 @@ def on_admin_create_judge(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = CreateJudge()
             count = Applicant.objects.count()
@@ -356,7 +358,7 @@ def on_admin_create_judge(request):
                 except (Error):
                     unique = True
                     return render(request, 'AuditiON/on_admin_create_judge.html', {'form':form, 'unique':unique})
-                                  
+
                 return HttpResponseRedirect(reverse('on_admin_judge_home'))
             else:
                 return render(request, 'AuditiON/on_admin_create_judge.html', {'form':form})
@@ -370,7 +372,7 @@ def on_admin_delete_judge(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = DeleteJudge()
             return render(request, 'AuditiON/on_admin_delete_judge.html', {'form':form})
@@ -391,7 +393,7 @@ def on_admin_change_judge_email(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = ChangeJudgeEmail()
             return render(request, 'AuditiON/on_admin_change_judge_email.html', {'form':form})
@@ -416,7 +418,7 @@ def on_admin_change_judge_password(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = ChangeJudgePassword()
             return render(request, 'AuditiON/on_admin_change_judge_password.html', {'form':form})
@@ -440,7 +442,7 @@ def on_admin_instrument_home(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = Instruments.objects.all()
             return render(request, 'AuditiON/on_admin_instrument_home.html', {'form':form})
@@ -452,7 +454,7 @@ def on_admin_create_instrument(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             instruments = Instruments.objects.all()
             form = CreateInstrument()
@@ -471,7 +473,7 @@ def on_admin_delete_instrument(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             instruments = Instruments.objects.all()
             form = DeleteInstrument()
@@ -491,7 +493,7 @@ def on_admin_associate_judge(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = AssociateJudge()
             return render(request, 'AuditiON/on_admin_associate_judge.html', {'form':form})
@@ -510,7 +512,7 @@ def on_admin_disassociate_judge(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET' and not request.GET.getlist('judges')):
             judge_form = DeleteJudge()
             return render(request, 'AuditiON/on_admin_disassociate_judge.html', {'judge_form':judge_form})
@@ -539,7 +541,7 @@ def on_admin_applicant_home(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             applicants = Applicant.objects.all()
             count = Applicant.objects.count()
@@ -553,7 +555,7 @@ def on_admin_create_applicant(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = ApplicantForm()
             return render(request, 'AuditiON/on_admin_create_applicant.html', {'form':form})
@@ -572,7 +574,7 @@ def on_admin_delete_applicant(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = DeleteApplicant()
             return render(request, 'AuditiON/on_admin_delete_applicant.html', {'form':form})
@@ -592,7 +594,7 @@ def on_admin_edit_applicant_select(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = SelectApplicant()
             return render(request, 'AuditiON/on_admin_edit_applicant_select.html', {'form':form})
@@ -607,7 +609,7 @@ def on_admin_edit_applicant(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             applicant_code = request.GET.getlist('applicant')
             applicant = Applicant.objects.get(code=applicant_code[0])
@@ -643,7 +645,7 @@ def on_admin_create_principal(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = CreatePrincipal()
             return render(request, 'AuditiON/on_admin_create_principal.html', {'form':form})
@@ -661,7 +663,7 @@ def on_admin_delete_principal(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = DeletePrincipal()
             return render(request, 'AuditiON/on_admin_delete_principal.html', {'form':form})
@@ -683,7 +685,7 @@ def on_admin_edit_principal_select(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             form = SelectPrincipal()
             return render(request, 'AuditiON/on_admin_edit_principal_select.html', {'form':form})
@@ -696,7 +698,7 @@ def on_admin_edit_principal(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             principal_code = request.GET.getlist('principal')
             principal = Principal.objects.get(code=principal_code[0])
@@ -718,7 +720,7 @@ def on_admin_production_data_home(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             production_data = ProductionData.objects.get(name='production_data')
             form = ProductionDataForm(instance=production_data)
@@ -738,10 +740,10 @@ def on_admin_email_home(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             return render(request, 'AuditiON/on_admin_email_home.html')
-    
+
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
@@ -750,7 +752,7 @@ def on_admin_email_accepted(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         if (request.method == 'GET'):
             accepted_confirmation = StockEmailData.objects.get(email_name='accepted_confirmation')
             form = StockEmailDataForm(instance=accepted_confirmation)
@@ -769,16 +771,16 @@ def on_admin_email_accepted_test(request):
     if (request.user.is_superuser):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
-        
+
         # build and send email
         applicant = Applicant.objects.filter(status__exact='Accepted')
         eh = EmailHelper.EmailHelper()
         messages = eh.accepted_applicant_conf(applicant)
         for message in messages:
             message.send()
-        
+
         return HttpResponseRedirect(reverse('on_admin_email_accepted'))
-    
+
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
@@ -788,10 +790,10 @@ def on_admin_data(request):
         #Create the HttpResponse object with the appropriate CSV header.
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="ONdatabase.csv"'
-        
+
         #all applicants in database
         data = Applicant.objects.all()
-    
+
         writer = csv.writer(response)
         writer.writerow(['First Name', 'Last Name', 'Phone Number', 'Email Address', 'Zip Code', 'Age', 'School', 'Instrument', 'Availability', 'Availability Explaination', 'Youtube Link', 'Ranking', 'Status', 'Confirmation',])
         for x in data:
@@ -807,11 +809,11 @@ def on_admin_accepted_confirmed(request):
         #Create the HttpResponse object with the appropriate CSV header.
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="accepted_alternate_confirmed.csv"'
-        
+
         #filter accepted and alternates who have confirmed
         accepted = Applicant.objects.filter(status__contains='Accepted').filter(confirmation__exact='Accept')
         alternate = Applicant.objects.filter(status__contains='Alternate').filter(confirmation__exact='Accept')
-        
+
         writer = csv.writer(response)
         writer.writerow(['First Name', 'Last Name', 'Phone Number', 'Email Address', 'Zip Code', 'Age', 'School', 'Instrument', 'Availability', 'Availability Explaination', 'Youtube Link', 'Ranking', 'Status', 'Confirmation',])
         for x in accepted:
@@ -828,4 +830,3 @@ def on_admin_logout(request):
     """ Logs out superusers """
     logout(request)
     return HttpResponseRedirect(reverse('on_admin_login'))
-

@@ -3,7 +3,9 @@
 {% block Instructions %}
 <p>Hi {{ first_name }}!</p>
 
-<p>Please accept or decline your offer to participate in Orchestra Next:</p>
+<p>Please accept or decline your offer to participate in Orchestra Next for the services you specified:</p>
+Availability: {{ availability }}<br>
+Availability Explaination: {{ avail_explain }}<br>
 
 <p>Don't forget to click the submit button!</p>
 
@@ -22,7 +24,7 @@
             {{ field.as_hidden }}
         {% endif %}
     {% endfor %}
-    
+
     <br>
     <input type="submit" value="Submit" />
 </form>

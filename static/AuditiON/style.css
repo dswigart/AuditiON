@@ -191,6 +191,10 @@ li { color: red;
   text-align: center;
 }
 
+.judge_button {
+  font-size: 22px;
+}
+
 /* Medium screens */
 @media all and (max-width: 900px) {
     .applicant_form {

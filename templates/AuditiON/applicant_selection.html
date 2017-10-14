@@ -5,16 +5,7 @@
 
 <p>Please mark accepted/alternate/declined applicants, rank and submit.</p>
 
-<p>
-<a href="{% url 'judge_logout' %}">Logout</a><br>
-</p>
-
-<hr>
-{% endblock %}
-
-{% block Content %}
-
-<p>Select instrument to judge:</p>
+Select instrument to judge:<br>
 <form action="{% url 'applicant_selection' %}" method="get">
 
     {% csrf_token %}
@@ -24,11 +15,16 @@
     {% endfor %}
     <input type="submit" value="Submit"/>
 </form>
+<hr>
+{% endblock %}
+
+{% block Content %}
+
 
 {% if set %}
-<br>
-<p>Displaying all {{ instrument }} applicants:</p>
-<br><br>
+
+<p class="judge_button">Displaying all {{ instrument }} applicants:</p>
+
 <form action="{% url 'applicant_selection' %}" method="post">
     {{ set.management_form }}
     {% csrf_token %}
@@ -48,7 +44,10 @@
         {% endfor %}
         <br>
     {% endfor %}
-    <input type="submit" value="Submit" />
+    <input type="submit" value="Submit" class="input_1" />
 </form>
 {% endif %}
+<br>
+<a href="{% url 'judge_logout' %}" class="judge_button">Logout</a><br>
+
 {% endblock %}
