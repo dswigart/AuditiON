@@ -772,13 +772,16 @@ def on_admin_email_accepted_test(request):
         if (functions.deny_brian(request.user.get_username())):
             return HttpResponseRedirect(reverse('access_denied'))
 
-        # build and send email
+        # edit data down to few applicants
         applicant = Applicant.objects.filter(status__exact='Accepted')
+        applicant = applicant[0:2]
+
         eh = EmailHelper.EmailHelper()
         messages = eh.accepted_applicant_conf(applicant)
         for message in messages:
+            # don't email the applicant!!
+            message.to = [u'orchestranext@gmail.com']
             message.send()
-
         return HttpResponseRedirect(reverse('on_admin_email_accepted'))
 
     else:
