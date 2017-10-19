@@ -190,7 +190,6 @@ def applicant_selection(request):
     except (ObjectDoesNotExist):
         return HttpResponseRedirect(reverse('database_problem'))
     lock = controls.judge_submission_form_lock
-
     # redirect if closed
     if (lock == 'Locked'):
         return HttpResponseRedirect(reverse('access_denied'))
@@ -215,7 +214,7 @@ def applicant_selection(request):
             set = ApplicantFormSet(request.POST)
             if (set.is_valid):
                 set.save()
-                return HttpResponseRedirect(reverse('form_success'))
+                return HttpResponseRedirect(reverse('applicant_list'))
             else:
                 return HttpResponseRedirect(reverse('database_problem'))
 
