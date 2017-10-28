@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.forms import modelformset_factory, modelform_factory
 from django.db import Error, connection
 from django.core.exceptions import ObjectDoesNotExist
@@ -123,7 +123,6 @@ def applicant_confirmation(request):
             cursor = connection.cursor()
             cursor.execute('UPDATE "AuditiON_applicant" SET confirmation = %s WHERE code = %s', [form['confirmation'].data, form['code'].data])
             return HttpResponseRedirect('form_success')
-
         # the only reason for invalid form is tampering, deny access
         else:
             return HttpResponseRedirect(reverse('access_denied'))
@@ -203,7 +202,6 @@ def applicant_selection(request):
 
                 ApplicantFormSet = modelformset_factory(Applicant, fields=('first_name', 'last_name', 'status', 'ranking'), extra=0)
                 set = ApplicantFormSet(queryset=Applicant.objects.filter(instrument__exact=instrument).order_by('last_name'))
-                print dir(set)
                 return render(request, 'AuditiON/applicant_selection.html', {'instrument':instrument, 'set':set, 'instrument_list':instrument_list})
             else:
                 instrument_list = ToggleInstrument(judge=request.user)
@@ -772,15 +770,25 @@ def on_admin_email_accepted_test(request):
             return HttpResponseRedirect(reverse('access_denied'))
 
         # edit data down to few applicants
-        applicant = Applicant.objects.filter(status__exact='Accepted')
-        applicant = applicant[0:2]
+        applicants = Applicant.objects.filter(status__exact='Accepted')
+        print type(applicants)
+        applicants = applicants[0:2]
+        print type(applicants)
+        for applicant in applicants:
+            # don't email the applicant with a test!!
+            applicant.email_address = u'orchestranext@gmail.com'
 
         eh = EmailHelper.EmailHelper()
-        messages = eh.accepted_applicant_conf(applicant)
+        messages = eh.accepted_applicant_conf(applicants)
         for message in messages:
-            # don't email the applicant!!
-            message.to = [u'orchestranext@gmail.com']
-            message.send()
+            print message.recipients()
+            try:
+                print 'before send'
+                message.send(fail_silently=True)
+                print 'after send'
+            except Exception as err:
+                print err
+        print 'before redirect'
         return HttpResponseRedirect(reverse('on_admin_email_accepted'))
 
     else:
@@ -826,6 +834,24 @@ def on_admin_accepted_confirmed(request):
         return response
     else:
         return HttpResponseRedirect(reverse('access_denied'))
+
+
+def json_results(request):
+    accepted = Applicant.objects.filter(status__contains='Accepted').filter(confirmation__exact='Accept')
+    alternate = Applicant.objects.filter(status__contains='Alternate').filter(confirmation__exact='Accept')
+
+    results = {}
+    for applicant in accepted:
+        full_name = applicant.first_name + applicant.last_name
+        if (applicant.instrument.name not in results):
+            reference = [(applicant.instrument.name, [full_name])]
+            results.update(reference)
+            print 'in if block'
+        else:
+            reference = results[applicant.instrument.name]
+            reference.append(full_name)
+            print 'in else block'
+    return JsonResponse(results)
 
 
 def on_admin_logout(request):
