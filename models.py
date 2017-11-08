@@ -60,12 +60,13 @@ class PrincipalManager(models.Manager):
     def get_principal_list(self):
         """ Returns a list of tuples for choices """
         principal_list = []
-        principals = self.model.objects.all()
+        return principal_list
+        '''principals = self.model.objects.all()
         for principal in principals:
             display = '%s %s, %s' % (principal.first_name, principal.last_name, principal.instrument)
             principal_tuple = (principal.code, display)
             principal_list.append(principal_tuple)
-        return principal_list
+        return principal_list'''
 
 
 class Principal(models.Model):
@@ -99,14 +100,15 @@ class ApplicantManager(models.Manager):
 
     def get_applicant_list(self):
         """ Returns a list of tuples for choices """
-
         applicant_list = []
-        applicants = self.model.objects.all().order_by('last_name')
+        return applicant_list
+
+        '''applicants = self.model.objects.all().order_by('last_name')
         for applicant in applicants:
             display = '%s %s, %s' % (applicant.first_name, applicant.last_name, applicant.instrument)
             applicant_tuple = (applicant.code, display)
             applicant_list.append(applicant_tuple)
-        return applicant_list
+        return applicant_list'''
 
 
 class Applicant(models.Model):
