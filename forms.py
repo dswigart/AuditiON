@@ -2,9 +2,9 @@ from django import forms
 
 from django.contrib.auth.models import User
 
-from AuditiON.models import Instruments
+from AuditiON.models import Instruments, Applicant, Principal
 from AuditiON.constants import AVAILABILITY_LIST, STATUS_CHOICES, CONFIRMATION_CHOICES, ADD_IGNORE, LOCK
-from AuditiON.functions import get_judge_list, get_instrument_list, get_applicant_list, get_principal_list, get_judge_ins_list
+from AuditiON.functions import get_judge_list
 
 
 class Locks(forms.Form):
@@ -15,9 +15,9 @@ class Locks(forms.Form):
 
 class ApplicantInfo(forms.Form):
     """ Data for superuser to filter applicant database query """
-    
+
     ###add an init!!!
-    instrument = forms.ChoiceField(label='instrument', choices=ADD_IGNORE(get_instrument_list()))
+    instrument = forms.ChoiceField(label='instrument', choices=ADD_IGNORE(Instruments.custom.get_instrument_list()))
     status = forms.ChoiceField(label='status', choices=ADD_IGNORE(STATUS_CHOICES))
     confirmation = forms.ChoiceField(label='confirmation', choices=ADD_IGNORE(CONFIRMATION_CHOICES))
     availability = forms.ChoiceField(label='availability', choices=ADD_IGNORE(AVAILABILITY_LIST))
@@ -33,7 +33,7 @@ class CreateJudge(forms.Form):
 
 class DeleteJudge(forms.Form):
     """ Admin form to delete judges """
-    
+
     def __init__(self, *args, **kwargs):
         super(DeleteJudge, self).__init__(*args, **kwargs)
         self.fields['judges'].choices = get_judge_list()
@@ -46,7 +46,7 @@ class ChangeJudgeEmail(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ChangeJudgeEmail, self).__init__(*args, **kwargs)
         self.fields['username'].choices = get_judge_list()
-    
+
     username = forms.ChoiceField(label='Username', choices=get_judge_list())
     email = forms.EmailField(label='New Email Address')
 
@@ -62,63 +62,61 @@ class AssociateJudge(forms.Form):
     def __init__(self, *args, **kwargs):
         super(AssociateJudge, self).__init__(*args, **kwargs)
         self.fields['username'].choices = get_judge_list()
-        self.fields['instrument'].choices = get_instrument_list()
-    
+        self.fields['instrument'].choices = Instruments.custom.get_instrument_list()
+
     username = forms.ChoiceField(label='Judge', choices=get_judge_list())
-    instrument = forms.ChoiceField(label='Instrument', choices=get_instrument_list())
+    instrument = forms.ChoiceField(label='Instrument', choices=Instruments.custom.get_instrument_list())
 
 
 class DeleteApplicant(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(DeleteApplicant, self).__init__(*args, **kwargs)
-        self.fields['full_name'].choices = get_applicant_list()
-    
-    full_name = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=get_applicant_list())
+        self.fields['full_name'].choices = Applicant.custom.get_applicant_list()
+
+    full_name = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=Applicant.custom.get_applicant_list())
 
 
 class SelectApplicant(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(SelectApplicant, self).__init__(*args, **kwargs)
-        self.fields['applicant'].choices = get_applicant_list()
-    
-    applicant = forms.ChoiceField(label='Applicant', choices=get_applicant_list())
+        self.fields['applicant'].choices = Applicant.custom.get_applicant_list()
+
+    applicant = forms.ChoiceField(label='Applicant', choices=Applicant.custom.get_applicant_list())
 
 
 class DeletePrincipal(forms.Form):
-    
+
     def __init__(self, *args, **kwargs):
         super(DeletePrincipal, self).__init__(*args, **kwargs)
-        self.fields['full_name'].choices = get_principal_list()
-    
-    full_name = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=get_principal_list())
+        self.fields['full_name'].choices = Principal.custom.get_principal_list()
+
+    full_name = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=Principal.custom.get_principal_list())
 
 
 class SelectPrincipal(forms.Form):
-    
+
     def __init__(self, *args, **kwargs):
         super(SelectPrincipal, self).__init__(*args, **kwargs)
-        self.fields['principal'].choices = get_principal_list()
-    
-    principal = forms.ChoiceField(label='Principal', choices=get_principal_list())
+        self.fields['principal'].choices = Principal.custom.get_principal_list()
+
+    principal = forms.ChoiceField(label='Principal', choices=Principal.custom.get_principal_list())
 
 
 class DeleteInstrument(forms.Form):
-    
+
     def __init__(self, *args, **kwargs):
         super(DeleteInstrument, self).__init__(*args, **kwargs)
-        self.fields['name'].choices = get_instrument_list()
-    
-    name = forms.ChoiceField(label='Instrument', choices=get_instrument_list())
+        self.fields['name'].choices = Instruments.custom.get_instrument_list().order_by('score_order')
+
+    name = forms.ChoiceField(label='Instrument', choices=Instruments.custom.get_instrument_list().order_by('score_order'))
 
 
 class ToggleInstrument(forms.Form):
     def __init__(self, *args, **kwargs):
         judge = kwargs.pop('judge')
         super(ToggleInstrument, self).__init__(*args, **kwargs)
-        self.fields['instrument_list'].choices = get_judge_ins_list(judge)
-    
+        self.fields['instrument_list'].choices = Instruments.custom.get_judge_ins_list(judge).order_by('score_order')
+
     instrument_list = forms.ChoiceField(label='Instrument_List')
-
-

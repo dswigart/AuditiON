@@ -4,28 +4,6 @@
 AVAIL_ALL = 'All'
 AVAIL_SOME = 'Some'
 
-#Each of these has 'one-to-one' relationship with
-#judges in User model.
-FLUTE = 'Flute'
-OBOE = 'Oboe'
-ENGLISHHORN = 'English Horn'
-CLARINET = 'Clarinet'
-BASSCLARINET = 'Bass Clarinet'
-BASSOON = 'Bassoon'
-FRENCHHORN = 'French Horn'
-TRUMPET = 'Trumpet'
-TROMBONE = 'Trombone'
-BASSTROMBONE = 'Bass Trombone'
-TUBA = 'Tuba'
-TIMPANI = 'Timpani'
-PERCUSSION = 'Percussion'
-KEYBOARDS = 'Keyboards'
-HARP = 'Harp'
-VIOLIN = 'Violin'
-VIOLA = 'Viola'
-CELLO = 'Cello'
-BASS = 'Bass'
-
 AVAILABILITY_LIST = (
     (AVAIL_ALL, 'All'),
     (AVAIL_SOME, 'Some'),
@@ -35,31 +13,6 @@ YES_NO = (
     ('Yes', 'Yes'),
     ('No', 'No'),
     )
-
-#for use in forms
-INSTRUMENT_LIST = (
-   (FLUTE, FLUTE),
-   (OBOE, OBOE),
-   (ENGLISHHORN, ENGLISHHORN),
-   (CLARINET, CLARINET),
-   (BASSCLARINET, BASSCLARINET),
-   (BASSOON, BASSOON),
-   (FRENCHHORN, FRENCHHORN),
-   (TRUMPET, TRUMPET),
-   (TROMBONE, TROMBONE),
-   (BASSTROMBONE, BASSTROMBONE),
-   (TUBA, TUBA),
-   (TIMPANI, TIMPANI),
-   (PERCUSSION, PERCUSSION),
-   (KEYBOARDS, KEYBOARDS),
-   (HARP, HARP),
-   (VIOLIN, VIOLIN),
-   (VIOLA, VIOLA),
-   (CELLO, CELLO),
-   (BASS, BASS),
-   )
-
-
 
 def ADD_IGNORE(tuple):
     list = []
