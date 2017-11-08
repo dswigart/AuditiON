@@ -4,7 +4,7 @@
 <p>You're logged in as {{ request.user.username }}</p>
 
 <hr>
-
+<p><a href="{% url 'on_admin_edit_score_order' %}">Edit Score Order</a></p>
 <p><a href="{% url 'on_admin_create_instrument' %}">Create New Instrument</a></p>
 <p><a href="{% url 'on_admin_delete_instrument' %}">Delete Instrument</a></p>
 

@@ -441,8 +441,29 @@ def on_admin_instrument_home(request):
             return HttpResponseRedirect(reverse('access_denied'))
 
         if (request.method == 'GET'):
-            form = Instruments.objects.all()
+            form = Instruments.objects.all().order_by('score_order')
             return render(request, 'AuditiON/on_admin_instrument_home.html', {'form':form})
+    else:
+        return HttpResponseRedirect(reverse('access_denied'))
+
+
+def on_admin_edit_score_order(request):
+    if (request.user.is_superuser):
+        if (functions.deny_brian(request.user.get_username())):
+            return HttpResponseRedirect(reverse('access_denied'))
+
+        if (request.method == 'GET'):
+            InstrumentFormSet = modelformset_factory(Instruments, fields=('name', 'score_order'), extra=0)
+            set = InstrumentFormSet(queryset=Instruments.objects.all())
+            return render(request, 'AuditiON/on_admin_edit_score_order.html', {'set':set})
+        if (request.method == 'POST'):
+            InstrumentFormSet = modelformset_factory(Instruments, fields=('name', 'score_order'), extra=0)
+            set = InstrumentFormSet(request.POST)
+            if (set.is_valid):
+                set.save()
+                return HttpResponseRedirect(reverse('on_admin_instrument_home'))
+            else:
+                return HttpResponseRedirect(reverse('database_problem'))
     else:
         return HttpResponseRedirect(reverse('access_denied'))
 
@@ -453,7 +474,7 @@ def on_admin_create_instrument(request):
             return HttpResponseRedirect(reverse('access_denied'))
 
         if (request.method == 'GET'):
-            instruments = Instruments.objects.all()
+            instruments = Instruments.objects.all().order_by('score_order')
             form = CreateInstrument()
             return render(request, 'AuditiON/on_admin_create_instrument.html', {'form':form, 'instruments':instruments})
         if (request.method == 'POST'):
@@ -472,7 +493,7 @@ def on_admin_delete_instrument(request):
             return HttpResponseRedirect(reverse('access_denied'))
 
         if (request.method == 'GET'):
-            instruments = Instruments.objects.all()
+            instruments = Instruments.objects.all().order_by('score_order')
             form = DeleteInstrument()
             return render(request, 'AuditiON/on_admin_delete_instrument.html', {'form':form, 'instruments':instruments})
         if (request.method == 'POST'):
@@ -521,8 +542,6 @@ def on_admin_disassociate_judge(request):
             return render(request, 'AuditiON/on_admin_disassociate_judge.html', {'instrument_form':instrument_form, 'judge_form2':judge_form2})
         if (request.method == 'POST'):
             judge = request.POST.getlist('judges')
-            print judge
-            print request.POST
             judge = User.objects.get(username=judge[0])
             instrument = request.POST.getlist('instrument_list')
             instrument = Instruments.objects.get(name=instrument[0])
@@ -540,7 +559,7 @@ def on_admin_applicant_home(request):
             return HttpResponseRedirect(reverse('access_denied'))
 
         if (request.method == 'GET'):
-            applicants = Applicant.objects.all()
+            applicants = Applicant.objects.all().order_by('last_name')
             count = Applicant.objects.count()
             return render(request, 'AuditiON/on_admin_applicant_home.html', {'applicants':applicants, 'count':count})
 
@@ -664,8 +683,8 @@ def on_admin_delete_principal(request):
         if (request.method == 'GET'):
             form = DeletePrincipal()
             return render(request, 'AuditiON/on_admin_delete_principal.html', {'form':form})
-        # to be want to give the option to delete more than one principal at a time?
-        # THIS IS WHERE YOU ARE
+
+        # do you want to give the option to delete more than one principal at a time?
         if (request.method == 'POST'):
             post = request.POST.getlist('full_name')
             for principal in post:
@@ -846,11 +865,11 @@ def json_results(request):
         if (applicant.instrument.name not in results):
             reference = [(applicant.instrument.name, [full_name])]
             results.update(reference)
-            print 'in if block'
         else:
             reference = results[applicant.instrument.name]
             reference.append(full_name)
-            print 'in else block'
+
+    print JsonResponse(results).content
     return JsonResponse(results)
 
 

@@ -20,10 +20,30 @@ class Legacy(models.Model):
     zip_code = models.CharField('Zip Code', max_length=5)
 
 
+class InstrumentManager(models.Manager):
+    """ Custom Manager methods for instrument collections in forms"""
+    def get_queryset(self):
+        return super(InstrumentManager, self).get_queryset().order_by('score_order')
+
+    def get_instrument_list(self):
+        """ Returns a list of tuples for choices"""
+        instrument = self.model.objects.all().values_list('name', 'name')
+        return instrument
+
+    def get_judge_ins_list(self, judge):
+        """ Returns a list of tuples for choices"""
+        instrument = judge.ins.all().values_list('name', 'name')
+        return instrument
+
+
 class Instruments(models.Model):
     """ Instruments """
     name = models.CharField('Instrument Name', max_length=30, primary_key=True)
     judge = models.ForeignKey(User, related_name='ins', on_delete=models.SET_NULL, null=True, blank=True)
+    score_order = models.IntegerField('Score Ordering')
+
+    objects = InstrumentManager()
+    custom = InstrumentManager()
 
     def __str__(self):
         return self.name
@@ -32,7 +52,20 @@ class Instruments(models.Model):
 class CreateInstrument(ModelForm):
     class Meta:
         model = Instruments
-        fields = ['name']
+        fields = ['name', 'score_order']
+
+
+class PrincipalManager(models.Manager):
+
+    def get_principal_list(self):
+        """ Returns a list of tuples for choices """
+        principal_list = []
+        principals = self.model.objects.all()
+        for principal in principals:
+            display = '%s %s, %s' % (principal.first_name, principal.last_name, principal.instrument)
+            principal_tuple = (principal.code, display)
+            principal_list.append(principal_tuple)
+        return principal_list
 
 
 class Principal(models.Model):
@@ -42,6 +75,9 @@ class Principal(models.Model):
     email_address = models.EmailField('Email Address')
     instrument = models.ForeignKey(Instruments, related_name='prin', on_delete=models.SET_NULL, null=True, blank=True)
     code = models.CharField(max_length=40, blank=True)
+
+    objects = models.Manager()
+    custom = PrincipalManager()
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
@@ -59,9 +95,23 @@ class CreatePrincipal(ModelForm):
         fields = '__all__'
 
 
+class ApplicantManager(models.Manager):
+
+    def get_applicant_list(self):
+        """ Returns a list of tuples for choices """
+
+        applicant_list = []
+        applicants = self.model.objects.all().order_by('last_name')
+        for applicant in applicants:
+            display = '%s %s, %s' % (applicant.first_name, applicant.last_name, applicant.instrument)
+            applicant_tuple = (applicant.code, display)
+            applicant_list.append(applicant_tuple)
+        return applicant_list
+
+
 class Applicant(models.Model):
     """ Main data for Orchestra applicants """
-    
+
     first_name = models.CharField('First Name', max_length=30)
     last_name = models.CharField('Last Name', max_length=30)
     phone_number = models.CharField('Phone Number', max_length=17)
@@ -80,8 +130,10 @@ class Applicant(models.Model):
     confirmation = models.CharField(max_length=12, choices=CONFIRMATION_CHOICES, default='Unconfirmed')
     code = models.CharField(max_length=40, blank=True)
     submission_date_time = models.DateTimeField(auto_now_add=True)
-                                    
-                                    
+
+    objects = models.Manager()
+    custom = ApplicantManager()
+
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
@@ -89,7 +141,7 @@ class Applicant(models.Model):
 class ApplicantForm(ModelForm):
     class Meta:
         model = Applicant
-        #change to 'include' style when first audition is over 
+        #change to 'include' style when first audition is over
         exclude = ['status', 'ranking', 'confirmation', 'code']
 
 
@@ -118,7 +170,7 @@ class AuditionControl(models.Model):
     reference_name = models.CharField(max_length=9, primary_key=True)
     applicant_form_lock = models.CharField(max_length=8, choices=LOCK)
     judge_submission_form_lock = models.CharField(max_length=8, choices=LOCK)
-    
+
 
     def __str__(self):
         return 'Applicant form is: %s and Judge submission form is: %s' % (self.applicant_form_lock, self.judge_submission_form_lock)
