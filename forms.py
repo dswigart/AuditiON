@@ -65,7 +65,7 @@ class AssociateJudge(forms.Form):
         self.fields['instrument'].choices = Instruments.custom.get_instrument_list()
 
     username = forms.ChoiceField(label='Judge', choices=get_judge_list())
-    instrument = forms.ChoiceField(label='Instrument', choices=Instruments.custom.get_instrument_list())
+    instrument = forms.ChoiceField(label='Instrument', choices=[('a','a')])#Instruments.custom.get_instrument_list())
 
 
 class DeleteApplicant(forms.Form):
@@ -110,7 +110,7 @@ class DeleteInstrument(forms.Form):
         super(DeleteInstrument, self).__init__(*args, **kwargs)
         self.fields['name'].choices = Instruments.custom.get_instrument_list().order_by('score_order')
 
-    name = forms.ChoiceField(label='Instrument', choices=Instruments.custom.get_instrument_list().order_by('score_order'))
+    name = forms.ChoiceField(label='Instrument', choices=[('a','a')])#Instruments.custom.get_instrument_list().order_by('score_order'))
 
 
 class ToggleInstrument(forms.Form):

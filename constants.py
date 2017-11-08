@@ -17,8 +17,8 @@ YES_NO = (
 def ADD_IGNORE(tuple):
     list = []
     list.append(('Ignore', '---'))
-    for x in tuple:
-        list.append(x)
+    #for x in tuple:
+        #list.append(x)
     return list
 
 
