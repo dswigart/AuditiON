@@ -50,10 +50,11 @@ urlpatterns = [
     url(r'^on_admin_create_instrument$', views.on_admin_create_instrument, name='on_admin_create_instrument'),
     url(r'^on_admin_delete_instrument$', views.on_admin_delete_instrument, name='on_admin_delete_instrument'),
     url(r'^on_admin_edit_score_order$', views.on_admin_edit_score_order, name='on_admin_edit_score_order'),
-    
+
     # Locks
     url(r'^on_admin_locks$', views.on_admin_locks, name='on_admin_locks'),
 
+    # data output
     url(r'^json_results$', views.json_results, name='json_results'),
 
     # Email
