@@ -1,0 +1,35 @@
+{% extends "on_admin_base.html" %}
+
+{% block Instructions %}
+<p>You are logged in as "{{ request.user.username }}"</p>
+
+<p>Edit Score Order</p>
+<hr>
+{% endblock %}
+
+{% block Content %}
+
+
+{% if set %}
+
+<form action="{% url 'on_admin_edit_score_order' %}" method="post">
+    {{ set.management_form }}
+    {% csrf_token %}
+    {% for form in set %}
+        {% for field in form %}
+            {% if "-id" in field.id_for_label %}
+                {{ field.as_hidden }}
+            {% elif "name" in field.id_for_label %}
+                {{ field.value }}
+                {{ field.as_hidden }}
+            {% elif "score" in field.id_for_label %}
+                {{ field }}
+            {% endif %}
+        {% endfor %}
+        <br>
+    {% endfor %}
+    <input type="submit" value="Submit" class="input_1" />
+</form>
+
+{% endif %}
+{% endblock %}
